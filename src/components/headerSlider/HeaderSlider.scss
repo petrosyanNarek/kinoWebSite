@@ -1,0 +1,385 @@
+.header-slider {
+    width: 100%;
+    height: 500px;
+    display: flex;
+}
+
+.main-slider {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    background-color: #000;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    a {
+        width: 10%;
+        text-decoration: none;
+        background: #FF8D1B;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 5px 15px;
+        margin-left: 165px;
+        color: white;
+    }
+
+}
+
+.time-slider {
+    width: 100%;
+    height: 5px;
+    background: transparent;
+    position: relative;
+    top: 0;
+    margin-bottom: 2em;
+
+
+    @keyframes timing {
+        0% {
+            width: 0%;
+        }
+
+        100% {
+            width: 100%;
+        }
+    }
+
+    div {
+        width: 0%;
+        height: 100%;
+        background-color: #FF8D1B;
+        animation-duration: 5s;
+        animation-timing-function: linear;
+        animation-iteration-count: infinite;
+        animation-name: timing;
+    }
+}
+
+
+.slider-content {
+    overflow: hidden;
+    width: 100%;
+    position: absolute;
+    min-height: 120px;
+    background-color: rgba(0, 0, 0, .5);
+    z-index: 100;
+    bottom: 0;
+    border-bottom-left-radius: 9px;
+
+    .film-desc {
+        margin-left: 165px;
+        padding: 5px 0;
+        margin-bottom: 0;
+        color: #fff;
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 1;
+        overflow: hidden;
+
+    }
+}
+
+
+.aside-items {
+    width: 25%;
+    height: 100%;
+    position: relative;
+    padding: 2px;
+    background-color: #000;
+    display: flex;
+
+}
+
+.aside-items-img {
+    width: 25%;
+
+    img {
+        border: 1px solid white;
+        width: 100%;
+        object-fit: cover;
+    }
+}
+
+.aside-item-info {
+    width: 75%;
+    color: white;
+    padding: 5px 10px 13px 10px;
+
+    h6 {
+
+        font-weight: 700;
+        color: #FF8D1B;
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 1;
+        overflow: hidden;
+    }
+
+    p {
+        font-size: 10px;
+        font-size: smaller;
+        text-align: left;
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 3;
+        overflow: hidden;
+    }
+}
+
+
+// Swiper
+.swiper {
+    width: 100%;
+    height: 100%;
+}
+
+
+
+
+.swiper {
+    width: 100%;
+    height: 90%;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.swiper-slide {
+    background-size: cover;
+    background-position: center;
+}
+
+.mySwiper2 {
+    height: 100%;
+    width: 100%;
+
+    .swiper-button-next,
+    .swiper-button-prev {
+        top: var(--swiper-navigation-top-offset, 86%);
+        color: white;
+    }
+
+    .swiper-button-prev,
+    .swiper-rtl .swiper-button-next {
+        left: var(--swiper-navigation-sides-offset, 95px);
+        right: auto;
+    }
+
+    .swiper-button-next,
+    .swiper-rtl .swiper-button-prev {
+        right: var(--swiper-navigation-sides-offset, 95px);
+        left: auto;
+    }
+}
+
+.mySwiper {
+    height: 100%;
+    box-sizing: border-box;
+    padding: 10px 0;
+}
+
+.mySwiper .swiper-slide {
+    opacity: 0.4;
+}
+
+.mySwiper .swiper-slide-thumb-active {
+    opacity: 1;
+}
+
+.swiper-slide img {
+    height: 100%;
+    object-fit: cover;
+}
+
+
+
+
+
+
+
+
+@media only screen and (max-width:1724px) {
+    .aside-items {
+        width: 28%;
+    }
+}
+
+
+@media only screen and (max-width:1329px) {
+    .aside-items {
+        width: 40%;
+    }
+}
+
+@media only screen and (max-width:1033px) {
+    .aside-items {
+        width: 30%;
+
+        .aside-carousel-card-img {
+            width: 30%;
+        }
+    }
+
+    .aside-carousel-card-info {
+        h6 {
+            font-size: 12px;
+
+        }
+
+        p {
+            font-size: 8px;
+        }
+    }
+
+}
+
+@media only screen and (max-width: 933px) {
+    .mySwiper2 {
+
+        .swiper-button-next,
+        .swiper-button-prev {
+            top: var(--swiper-navigation-top-offset, 86%);
+        }
+
+        .swiper-button-prev,
+        .swiper-rtl .swiper-button-next {
+            left: var(--swiper-navigation-sides-offset, 5px);
+            right: auto;
+        }
+
+        .swiper-button-next,
+        .swiper-rtl .swiper-button-prev {
+            right: var(--swiper-navigation-sides-offset, 5px);
+            left: auto;
+        }
+    }
+}
+
+@media only screen and (max-width:858px) {
+    .aside-items {
+        width: 25%;
+
+        .aside-carousel-card-img {
+            width: 40%;
+        }
+    }
+}
+
+@media only screen and (max-width:781px) {
+    .main-slider {
+
+        .slider-content {
+            padding: 15px;
+
+            .film-name {
+                font-size: 10px;
+            }
+        }
+    }
+
+    .aside-items {
+        width: 25%;
+
+        .aside-carousel-card-img {
+            width: 55%;
+        }
+    }
+
+    .aside-item-info {
+        h6 {
+            font-size: 10px;
+            margin-left: 5px;
+        }
+    }
+
+    .aside-carousel-card-info {
+        h6 {
+            font-size: 10px;
+
+        }
+
+        p {
+            font-size: 7px;
+        }
+    }
+}
+
+@media only screen and (max-width:631px) {
+    .mySwiper2 {
+
+        .swiper-button-next,
+        .swiper-button-prev {
+            top: var(--swiper-navigation-top-offset, 86%);
+        }
+
+        .swiper-button-prev,
+        .swiper-rtl .swiper-button-next {
+            left: var(--swiper-navigation-sides-offset, 10px);
+            right: auto;
+        }
+
+        .swiper-button-next,
+        .swiper-rtl .swiper-button-prev {
+            right: var(--swiper-navigation-sides-offset, 10px);
+            left: auto;
+        }
+    }
+
+    .aside-items {
+        width: 25%;
+
+        .aside-carousel-card-img {
+            width: 75%;
+        }
+    }
+
+    .main-slider {
+
+        .slider-content {
+            padding: 16px;
+
+            .film-name {
+                font-size: 8px;
+            }
+
+            .film-year {
+                font-size: 8px;
+            }
+        }
+    }
+
+    .aside-item-info {
+        padding: 8px 0 0 35px;
+    }
+}
+
+
+@media only screen and (max-width:461px) {
+    .aside-items {
+        display: none;
+    }
+
+    .active-slider-item {
+        width: 100%;
+    }
+
+    .header-slider {
+        height: 300px;
+    }
+
+    .main-slider {
+
+        .slider-content {
+            padding: 18px;
+
+            .film-name {
+                font-size: 8px;
+            }
+
+            .film-year {
+                font-size: 8px;
+            }
+        }
+    }
+}

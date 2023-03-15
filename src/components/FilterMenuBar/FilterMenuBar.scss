@@ -1,0 +1,46 @@
+.filter-special-films{
+    width: 50%;
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    padding-left: 0;
+    flex-wrap: wrap;
+    gap: 20px;
+    li{
+       list-style-type: none;
+       button{
+            background-color: #f3f1f1;
+            border: none;
+            padding: 10px 20px;
+            transition: all 0.3s ease-in-out 0s;
+            &:hover{
+                background-color: #FF8D1B;
+                border: none;
+                border-radius: 0;
+                color: #000000;
+            }
+       }
+       #active-menu-item{
+        background-color: #FF8D1B;
+        border: none;
+        border-radius: 0;
+        color: #fdfbfb;
+        }
+    }
+}
+
+
+
+
+@media only screen and (max-width:768px) {
+    .filter-special-films{
+        width: 100%;
+        li{
+            width: 100%;
+            button{
+                width: 100%;
+            }
+        }
+    } 
+    
+}

@@ -1,0 +1,57 @@
+.similar-movies {
+    max-height: 1330px;
+    overflow-y: scroll;
+
+    &::-webkit-scrollbar {
+        display: none;
+    }
+}
+
+.similar-movie-img {
+    img {
+        width: 101px;
+        height: 150px;
+        vertical-align: middle;
+    }
+}
+
+.similar-movies-info {
+    padding-right: 0;
+    margin: 0 0 0 20px;
+
+    .similar-movies-title {
+        text-decoration: none;
+        margin: 0 0 0em 0;
+        font-size: 1em;
+        font-weight: 400;
+        color: #212121;
+
+        &:hover {
+            text-decoration: underline;
+        }
+    }
+
+    .similar-movies-author {
+
+        font-size: 13px;
+        color: #9E9E9E;
+        margin: 0em 0;
+    }
+
+    .similar-movies-author-link {
+        color: #ff8d1b;
+        text-decoration: none;
+        line-height: 2em;
+        font-size: 1em;
+    }
+
+    .viws {
+        font-size: 12px;
+        color: #8c8c90;
+        margin: 0;
+    }
+}
+
+.movie-item {
+    display: flex;
+}

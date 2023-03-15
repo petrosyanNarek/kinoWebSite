@@ -1,0 +1,117 @@
+.commentsBar {
+    width: 95%;
+    margin: 1em 0 0 0;
+    padding-left: 0;
+    padding: 1em 1em;
+    box-shadow: 0px 0 2px #c1c1c1 !important;
+}
+
+.input-field {
+    outline: none;
+    border: 1px solid #D4D3D3;
+    background: none;
+    padding: 10px 10px;
+    width: 60%;
+    font-size: 13px;
+    margin-bottom: 1em;
+    color: #3f3f3f;
+}
+
+.text-area-field {
+    resize: none;
+    min-height: 100px;
+    margin: 1em 0;
+    width: 80%;
+    outline: none;
+    border: 1px solid #D4D3D3;
+    background: none;
+    padding: 10px 10px;
+    width: 60%;
+    font-size: 13px;
+}
+
+.errors-validate {
+    color: rgb(179, 44, 44);
+    font-weight: 700;
+    font-size: 16px;
+}
+
+.send-btn {
+    outline: none;
+    font-style: normal;
+    padding: 8px 20px;
+    background: #ff8d1b;
+    font-size: 14px;
+    color: #fff;
+    display: block;
+    border: none;
+    transition: .5s all;
+    -webkit-transition: .5s all;
+
+    &:hover {
+        text-decoration: none;
+        color: #fff;
+        background: #222;
+    }
+}
+
+.all-comments {
+    height: 376px;
+    overflow-y: scroll;
+
+    &::-webkit-scrollbar {
+        display: none;
+    }
+}
+
+.comment-item {
+    h5 {
+        font-size: 1.2em;
+        font-weight: 400;
+        margin: 0 0 20px 0;
+        color: #2d2d2d;
+    }
+
+    .comment-user-avatar {
+        display: table-cell;
+        vertical-align: top;
+        padding-right: 10px;
+    }
+
+    .comment-user-text {
+        display: table-cell;
+        vertical-align: top;
+        overflow: hidden;
+        zoom: 1;
+
+        p {
+            font-size: 13px;
+            color: #757575;
+            margin: 0 0 0.5em 0;
+            line-height: 1.5em;
+        }
+
+        span {
+            color: #C7C7C7;
+            font-size: 13px;
+            cursor: pointer;
+
+            a {
+                color: #ff8d1b;
+                text-decoration: none;
+            }
+
+            i {
+                color: rgb(60, 140, 231);
+            }
+        }
+    }
+}
+
+.see-all-btn {
+    border: none;
+    background: none;
+    color: gray;
+    font-size: 17px;
+    font-weight: 500;
+}

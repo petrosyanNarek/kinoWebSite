@@ -1,0 +1,108 @@
+.popular-movies {
+    padding: 32px 0;
+    width: 88%;
+    height: 100%;
+}
+
+.movies-vidio {
+    max-height: 363px;
+    padding: 0;
+    position: relative;
+
+    img {
+        max-height: 363px;
+    }
+}
+
+.movies-info {
+    background: #FF8D1B;
+    min-height: 312px;
+    padding: 3em 3em 0;
+
+    .info {
+        a {
+            text-decoration: none;
+
+            &:hover {
+                p {
+
+                    color: #dddbd9;
+
+                }
+            }
+        }
+    }
+
+    .movies-des {
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 5;
+        overflow: hidden;
+    }
+}
+
+.movies-story {
+    margin-bottom: 5px;
+    line-height: 1.5em;
+    height: 30px;
+
+}
+
+.movies-title {
+    color: #212121;
+    font-size: 14px;
+    font-weight: bold;
+    float: left;
+    width: 25%;
+
+}
+
+.movies-des {
+    color: #fff;
+    line-height: 1.5em;
+    width: 75%;
+    float: right;
+}
+
+.movies-name {
+    text-transform: uppercase;
+    font-size: 1.3em;
+    color: #212121;
+    font-weight: bold;
+    padding-bottom: 1em;
+}
+
+
+.film-carousel-card {
+    margin-bottom: 30px;
+    padding: 0 0px 0px 17px;
+
+    .film {
+        padding: 0;
+
+        .card-header {
+            height: 258px;
+        }
+    }
+}
+
+.prev-and-next {
+    width: 30px;
+    height: 30px;
+    margin: 0;
+    background: url("https://p.w3layouts.com/demos/aug-2016/24-08-2016/one_movies/web/images/img-sp.png") no-repeat 0px 0px;
+    cursor: pointer;
+    text-indent: -9999px;
+    opacity: 1;
+    transition: all .3s ease;
+    border: none;
+
+    &:hover {
+        opacity: .5;
+    }
+}
+
+.next-icon {
+    background-position: -37px 0px;
+    margin-left: 3px;
+}

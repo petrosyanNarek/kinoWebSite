@@ -1,0 +1,123 @@
+.footer{
+    background-color: #212121;;
+    padding:64px 0 102px;
+    .container{
+        height: 200px;
+    }
+}
+.footer-contect{
+    width: 88%;
+}
+.subscribe-form{
+    width: 100%;
+    border-bottom: 1px solid #999;
+    padding-bottom: 36px;
+    display: flex;
+}
+.subscribe-title{
+    font-size: 2em;
+    color: #FF8D1B;
+    text-transform: uppercase;
+    font-style: normal;
+    margin-bottom: 0.5em;
+}
+.subscribe-us{
+    padding: 10px;
+    border: 1px solid white;
+    width: 80%;
+    form{
+        input{
+            outline: none;
+            padding: 10px 10px;
+            font-size: 14px;
+            color: #999;
+            width: 74.1%;
+            background: #fff;
+            border: none;
+        }
+        button{
+            width: 25%;
+            background: #FF8D1B;
+            font-size: 14px;
+            text-transform: uppercase;
+            color: #fff;
+            border: none;
+            padding: 10px 0;
+            transition: .5s ease-in;
+            &:hover{
+                    background: #fff;
+                    color: #FF8D1B;
+            }
+        }
+    }
+}
+.header-slice{
+    display: flex;
+    align-items: center;
+    h3{
+        font-size: 2.8em;
+        color: #ffffff;
+        text-transform: uppercase;
+        font-weight: 900;
+        margin: 0;
+        span{
+            color: #FF8D1B;
+            font-size: .3em;
+             display: block;
+            font-weight: 300;
+            letter-spacing: 7px;
+            text-align: right;
+            line-height: 0;
+        }
+        
+    }
+    img{
+        margin: 12px 0 0 7px;
+    }
+}
+.sub-form-logo , .other-footer-info{
+    width: 50%;
+}
+
+.other-info{
+    p{
+        color: #999;
+        line-height: 1.8em;
+        
+    }
+}
+
+.footer-menu-bar{
+    li{
+        list-style: none;
+       
+    }
+}
+
+@media only screen and (max-width:1400px) {
+    .footer-contect{
+        width: 100%;
+    }
+}
+
+@media only screen and (max-width:986px) {
+    .subscribe-us{
+        width: 100%;
+    }
+    .sub-form-logo{
+        width: 68%;
+    }
+    .other-footer-info{
+        width: 32%;
+    }
+}
+@media only screen and (max-width:768px) {
+    .footer{
+        height: 500px;
+    }
+    .subscribe-form{
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+    }
+}

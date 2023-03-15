@@ -1,0 +1,98 @@
+.film {
+    padding: 0 20px;
+    position: relative;
+}
+
+.film-card {
+    border: none;
+
+    &:hover {
+        .face {
+            img {
+                opacity: 1;
+            }
+        }
+    }
+}
+
+.card-header {
+    width: 100%;
+    height: 268px;
+    background-position: 50% 50%;
+    background-size: cover;
+    position: relative;
+
+    .card-header-img {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        z-index: 5;
+        object-fit: cover;
+    }
+}
+
+.overlay {
+    width: 100%;
+    height: 100%;
+    transition: all 0.3s;
+    display: flex;
+    justify-content: center;
+    position: absolute;
+    z-index: 100;
+
+    &:hover {
+        background-color: #dad6d6a8;
+
+        .face {
+            width: 100%;
+
+            background-color: rgba(0, 0, 0, 0.54);
+
+            img {
+                width: 50px;
+                height: 50px;
+            }
+        }
+    }
+}
+
+.face {
+    width: 2%;
+    height: 100%;
+    transition: all 0.5s;
+    background-color: rgba(26, 236, 166, 0);
+    margin: 0 auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    img {
+        width: 0px;
+        height: 0px;
+        transition: all 0.3s;
+    }
+}
+
+.card-name {
+    margin: 5px 0;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 1;
+    overflow: hidden;
+}
+
+.all-info {
+    p {
+        margin: 0;
+    }
+}
+
+
+
+.rating {
+    i {
+        color: #ff8d1b;
+    }
+}

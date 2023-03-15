@@ -1,0 +1,9 @@
+.my-a{
+    text-decoration: none;
+    color: #fff;
+    transition: .5s ease-in;
+    cursor: pointer;
+    &:hover{
+        color: #FF8D1B;
+    }
+}
