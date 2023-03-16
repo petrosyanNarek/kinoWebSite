@@ -20,7 +20,6 @@ export const FilmPage = ({ film }) => {
       istrailer: false,
     },
   ];
-  console.log(isTrailer);
   return (
     <div className="movies-section mt-5">
       <div className="container mt-5 d-flex justify-content-center">

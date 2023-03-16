@@ -3,6 +3,8 @@ import { api } from "../../api";
 const initialState = {
   popularMowies: [],
   totalPages: 0,
+  loadind: false,
+  error: null,
 };
 
 export const getpopularFilms = createAsyncThunk(
@@ -26,14 +28,27 @@ const popularMowiesSlice = createSlice({
   initialState,
   reducers: {},
   extraReducers: (builder) => {
-    builder.addCase(getpopularFilms.fulfilled, (state, action) => {
-      state.popularMowies = action.payload.films;
-      state.totalPages = action.payload.totalPageCount - 1;
-    });
+    builder
+      .addCase(getpopularFilms.pending, (state, action) => {
+        state.loadind = true;
+      })
+      .addCase(getpopularFilms.rejected, (state, action) => {
+        state.loadind = false;
+        state.error = action.payload.message;
+      })
+      .addCase(getpopularFilms.fulfilled, (state, action) => {
+        state.loadind = false;
+        state.error = null;
+        state.popularMowies = action.payload.films;
+        state.totalPages = action.payload.totalPageCount - 1;
+      });
   },
 });
 
 export const selectpopularMowies = (state) => state.popularMowies.popularMowies;
+export const selectpopularMowiesLoading = (state) =>
+  state.popularMowies.loadind;
+export const selectpopularMowiesError = (state) => state.popularMowies.error;
 export const selectTotalPages = (state) => state.popularMowies.totalPages;
 
 export default popularMowiesSlice.reducer;

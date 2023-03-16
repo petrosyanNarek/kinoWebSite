@@ -6,8 +6,12 @@ import { useEffect } from "react";
 import { FilteredMovies } from "../filteredMowies/FilteredMovies";
 import {
   getDefoultFilms,
+  selectError,
+  selectLoading,
   selectSpecialFilms,
 } from "../../features/specialFilms/specialFilmSlice";
+import { LoadingSpinner } from "../UI/spinner/Spinner";
+import { Navigate } from "react-router-dom";
 
 export const TvSeriesDashBoard = () => {
   const filterManu = [
@@ -45,6 +49,8 @@ export const TvSeriesDashBoard = () => {
 
   const dispatch = useDispatch();
   const specialFilms = useSelector(selectSpecialFilms);
+  const specialFilmsLoading = useSelector(selectLoading);
+  const specialFilmsError = useSelector(selectError);
   useEffect(() => {
     dispatch(
       getDefoultFilms({ sortBy: "createdAt", sortOrder: "DESC", categoryId: 2 })
@@ -52,12 +58,18 @@ export const TvSeriesDashBoard = () => {
   }, [dispatch]);
   return (
     <MoviesSection name="Tv Series">
-      <div className="container mb-5 d-flex justify-content-center">
-        <div className="tv-series">
-          <FilterMenuBar filterManu={filterManu} getFilms={getDefoultFilms} />
-          <FilteredMovies specialFilms={specialFilms} />
+      {specialFilmsLoading ? (
+        <LoadingSpinner />
+      ) : specialFilmsError ? (
+        <Navigate to="/error500" replace={true} />
+      ) : (
+        <div className="container mb-5 d-flex justify-content-center">
+          <div className="tv-series">
+            <FilterMenuBar filterManu={filterManu} getFilms={getDefoultFilms} />
+            <FilteredMovies specialFilms={specialFilms} />
+          </div>
         </div>
-      </div>
+      )}
     </MoviesSection>
   );
 };

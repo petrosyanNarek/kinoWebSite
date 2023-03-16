@@ -4,12 +4,16 @@ import { useDispatch, useSelector } from "react-redux";
 import {
   getPremiresFilms,
   selectPremireFilms,
+  selectPremireFilmsError,
+  selectPremireFilmsloadingFilm,
 } from "../../features/films/premiresFilmSlice";
 import { useEffect, useState } from "react";
 import { SwiperSlide } from "swiper/react";
 import { Swiper } from "swiper/react";
 import { Autoplay, FreeMode, Pagination } from "swiper";
 import "swiper/css";
+import { LoadingSpinner } from "../UI/spinner/Spinner";
+import { Navigate } from "react-router-dom";
 
 function returnElementCount(width, film) {
   return film
@@ -34,6 +38,8 @@ function returnElementCount(width, film) {
 export const CarouselHomeFilms = (props) => {
   const dispatch = useDispatch();
   const films = useSelector(selectPremireFilms);
+  const filmsLoading = useSelector(selectPremireFilmsloadingFilm);
+  const filmsError = useSelector(selectPremireFilmsError);
   const [windowWidth, setWindowWhith] = useState(window.innerWidth);
   const updateWindowDimensions = () => {
     const newWidth = window.innerWidth;
@@ -59,44 +65,50 @@ export const CarouselHomeFilms = (props) => {
                 className="carousel slide"
                 data-ride="carousel"
               >
-                <Swiper
-                  slidesPerView={returnElementCount(windowWidth, props.films)}
-                  spaceBetween={0}
-                  freeMode={true}
-                  pagination={{
-                    clickable: true,
-                  }}
-                  autoplay={{
-                    delay: 2500,
-                    disableOnInteraction: false,
-                  }}
-                  modules={[Autoplay, FreeMode, Pagination]}
-                  id="my-swiper-home"
-                >
-                  <div data-bs-interval="1000">
-                    <div className="row">
-                      <div className="col-md-12">
-                        <div className="row row-cols-2 row-cols-sm-2 row-cols-lg-3 row-cols-xl-6">
-                          {props.films
-                            ? props.films.map((movItem) => {
-                                return (
-                                  <SwiperSlide key={movItem.id}>
-                                    <Film film={movItem} />
-                                  </SwiperSlide>
-                                );
-                              })
-                            : films.map((movItem) => {
-                                return (
-                                  <SwiperSlide key={movItem.id}>
-                                    <Film film={movItem} />
-                                  </SwiperSlide>
-                                );
-                              })}
+                {filmsLoading ? (
+                  <LoadingSpinner />
+                ) : filmsError ? (
+                  <Navigate to="/error500" replace={true} />
+                ) : (
+                  <Swiper
+                    slidesPerView={returnElementCount(windowWidth, props.films)}
+                    spaceBetween={0}
+                    freeMode={true}
+                    pagination={{
+                      clickable: true,
+                    }}
+                    autoplay={{
+                      delay: 2500,
+                      disableOnInteraction: false,
+                    }}
+                    modules={[Autoplay, FreeMode, Pagination]}
+                    id="my-swiper-home"
+                  >
+                    <div data-bs-interval="1000">
+                      <div className="row">
+                        <div className="col-md-12">
+                          <div className="row row-cols-2 row-cols-sm-2 row-cols-lg-3 row-cols-xl-6">
+                            {props.films
+                              ? props.films.map((movItem) => {
+                                  return (
+                                    <SwiperSlide key={movItem.id}>
+                                      <Film film={movItem} />
+                                    </SwiperSlide>
+                                  );
+                                })
+                              : films.map((movItem) => {
+                                  return (
+                                    <SwiperSlide key={movItem.id}>
+                                      <Film film={movItem} />
+                                    </SwiperSlide>
+                                  );
+                                })}
+                          </div>
                         </div>
                       </div>
                     </div>
-                  </div>
-                </Swiper>
+                  </Swiper>
+                )}
               </div>
             </div>
           </div>

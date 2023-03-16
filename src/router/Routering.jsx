@@ -8,6 +8,7 @@ import { Country } from "./../pages/Country/Country";
 import { AfromZ } from "./../pages/AfromZ/AfromZ";
 import { SearchFilms } from "../pages/Search/SearchFilms";
 import { FilmById } from "../pages/FilmById/FilmById";
+import { Error500 } from "../components/eror500/Error500";
 
 export const Routering = () => {
   return (
@@ -22,6 +23,7 @@ export const Routering = () => {
       <Route path="/search" element={<SearchFilms />} />
       <Route path="/film" element={<FilmById />} />
       <Route path="/film/:id" element={<FilmById />} />
+      <Route path="error500" element={<Error500 />} />
     </Routes>
   );
 };

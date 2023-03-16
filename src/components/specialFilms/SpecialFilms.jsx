@@ -2,11 +2,17 @@ import "./SpecialFilms.scss";
 import { MoviesSection } from "../moviesSection/MoviesSection";
 import { FilterMenuBar } from "./../FilterMenuBar/FilterMenuBar";
 import { useSelector } from "react-redux";
-import { selectSpecialFilms } from "../../features/specialFilms/specialFilmSlice";
+import {
+  selectError,
+  selectLoading,
+  selectSpecialFilms,
+} from "../../features/specialFilms/specialFilmSlice";
 import { useDispatch } from "react-redux";
 import { useEffect } from "react";
 import { getDefoultFilms } from "./../../features/specialFilms/specialFilmSlice";
 import { FilteredMovies } from "../filteredMowies/FilteredMovies";
+import { LoadingSpinner } from "../UI/spinner/Spinner";
+import { Navigate } from "react-router-dom";
 export const SpecialFilms = () => {
   const filterManu = [
     {
@@ -32,6 +38,8 @@ export const SpecialFilms = () => {
   ];
 
   const specialFilms = useSelector(selectSpecialFilms);
+  const specialFilmsLoading = useSelector(selectLoading);
+  const specialError = useSelector(selectError);
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(
@@ -41,12 +49,18 @@ export const SpecialFilms = () => {
 
   return (
     <MoviesSection name="FEATURED MOVIES">
-      <div className="container mb-5 d-flex justify-content-center">
-        <div className="special-film">
-          <FilterMenuBar filterManu={filterManu} getFilms={getDefoultFilms} />
-          <FilteredMovies specialFilms={specialFilms} />
+      {specialFilmsLoading ? (
+        <LoadingSpinner />
+      ) : specialError ? (
+        <Navigate to="/error500" replace={true} />
+      ) : (
+        <div className="container mb-5 d-flex justify-content-center">
+          <div className="special-film">
+            <FilterMenuBar filterManu={filterManu} getFilms={getDefoultFilms} />
+            <FilteredMovies specialFilms={specialFilms} />
+          </div>
         </div>
-      </div>
+      )}
     </MoviesSection>
   );
 };

@@ -5,6 +5,7 @@ import { MoviesSection } from "../moviesSection/MoviesSection";
 import "./FilmsByGanre.scss";
 import {
   getDefoultFilms,
+  selectError,
   selectLoading,
   selectSpecialFilms,
   selectTotalPages,
@@ -16,6 +17,7 @@ import {
   selectCountry,
 } from "./../../features/countries/countriesSlice";
 import { LoadingSpinner } from "../UI/spinner/Spinner";
+import { Navigate } from "react-router-dom";
 
 export const FilmsByGanre = ({ genreId, countryId, name }) => {
   const dispatch = useDispatch();
@@ -24,6 +26,7 @@ export const FilmsByGanre = ({ genreId, countryId, name }) => {
   const films = useSelector(selectSpecialFilms);
   const totalPages = useSelector(selectTotalPages);
   const loading = useSelector(selectLoading);
+  const error = useSelector(selectError);
   const [activePage, setActivePage] = useState(1);
 
   useEffect(() => {
@@ -54,7 +57,9 @@ export const FilmsByGanre = ({ genreId, countryId, name }) => {
             </div>
           </div>
         </MoviesSection>
-      ) : !loading && films.length === 0 ? (
+      ) : error ? (
+        <Navigate to="/error500" replace={true} />
+      ) : films.length === 0 ? (
         <MoviesSection name={"Noth Found"}>
           <div className="container mb-5 d-flex justify-content-center">
             <div className="ganere-film">

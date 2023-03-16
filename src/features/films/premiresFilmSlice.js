@@ -5,6 +5,10 @@ const initialState = {
   premiresFilm: [],
   film: {},
   similarMovie: [],
+  loading: false,
+  error: null,
+  loadingFilm: false,
+  errorFilm: null,
 };
 
 export const getPremiresFilms = createAsyncThunk(
@@ -47,6 +51,7 @@ export const getFilmByid = createAsyncThunk(
       });
       return item.data;
     } catch (error) {
+      console.log(error);
       return rejectWithValue(error);
     }
   }
@@ -75,28 +80,54 @@ const premireFilmSlice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder
+      .addCase(getPremiresFilms.pending, (state, action) => {
+        state.loading = true;
+      })
+      .addCase(getPremiresFilms.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload.message;
+      })
       .addCase(getPremiresFilms.fulfilled, (state, action) => {
+        state.loading = false;
+        state.error = null;
         state.premiresFilm = action.payload.films;
       })
       .addCase(getSimilarFilms.fulfilled, (state, action) => {
         state.similarMovie = action.payload;
       })
-      .addCase(getFilmByid.fulfilled, (state, action) => {
-        state.film = action.payload;
+      .addCase(getFilmByid.pending, (state, action) => {
+        state.loadingFilm = true;
       })
       .addCase(getFilmByid.rejected, (state, action) => {
-        state.film = {};
+        state.loadingFilm = false;
+        state.errorFilm = action.payload.message;
       })
-      .addCase(getSeriaByid.fulfilled, (state, action) => {
+      .addCase(getFilmByid.fulfilled, (state, action) => {
+        state.loadingFilm = false;
+        state.errorFilm = false;
         state.film = action.payload;
       })
+      .addCase(getSeriaByid.pending, (state, action) => {
+        state.loadingFilm = true;
+      })
       .addCase(getSeriaByid.rejected, (state, action) => {
-        state.film = {};
+        state.loadingFilm = false;
+        state.errorFilm = action.payload.message;
+      })
+      .addCase(getSeriaByid.fulfilled, (state, action) => {
+        state.loadingFilm = false;
+        state.errorFilm = false;
+        state.film = action.payload;
       });
   },
 });
 
 export const selectPremireFilms = (state) => state.premireFilms.premiresFilm;
+export const selectPremireFilmsloadingFilm = (state) =>
+  state.premireFilms.loading;
+export const selectPremireFilmsError = (state) => state.premireFilms.error;
+export const selectLoadingFilm = (state) => state.premireFilms.loadingFilm;
+export const selectFilmsError = (state) => state.premireFilms.error;
 export const selectFilm = (state) => state.premireFilms.film;
 export const selectSimilarFilm = (state) => state.premireFilms.similarMovie;
 
