@@ -7,17 +7,17 @@ export const Header = () => {
   return (
     <div className="header">
       <div className="header-items">
-        <div className="header-slice">
-          <h3>
-            one <span>movies</span>
-          </h3>
-          <Link to={"/"}>
+        <Link to={"/"}>
+          <div className="header-slice">
+            <h3>
+              one <span>movies</span>
+            </h3>
             <img
               src="https://p.w3layouts.com/demos/aug-2016/24-08-2016/one_movies/web/images/1.jpg"
               alt=""
             />
-          </Link>
-        </div>
+          </div>
+        </Link>
         <div className="header-slice">
           <form
             onSubmit={(e) => {

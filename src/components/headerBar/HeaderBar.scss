@@ -1,46 +1,58 @@
-.header{
+.header {
     width: 100%;
     background: #ffffff;
     display: flex;
     justify-content: center;
     align-items: center;
     min-height: 100px;
-    font-family:  -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;;
-    .header-items{
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
+    ;
+
+    .header-items {
         width: 60%;
         display: flex;
         justify-content: space-between;
         align-items: center;
         flex-wrap: wrap;
         gap: 20px;
-        .header-slice{
+
+        a {
+            text-decoration: none;
+        }
+
+        .header-slice {
             display: flex;
             align-items: center;
-            h3{
+
+            h3 {
                 font-size: 2.8em;
                 color: #212121;
                 text-transform: uppercase;
                 font-weight: 900;
                 margin: 0;
-                span{
+
+                span {
                     color: #FF8D1B;
                     font-size: .3em;
-                     display: block;
+                    display: block;
                     font-weight: 300;
                     letter-spacing: 5px;
                     text-align: right;
                     line-height: 0;
                 }
-                
+
             }
-            img{
+
+            img {
                 margin: 12px 0 0 7px;
             }
-            form{
+
+            form {
                 display: flex;
                 align-items: center;
                 width: 500px;
-                input[type="search"]{
+
+                input[type="search"] {
                     outline: none;
                     border: none;
                     background: #EFEFEF;
@@ -53,7 +65,8 @@
                     border-top-left-radius: 25px;
                     border-bottom-left-radius: 25px;
                 }
-                input[type="submit"]{
+
+                input[type="submit"] {
                     cursor: pointer;
                     width: 22%;
                     height: 40px;
@@ -65,7 +78,8 @@
                     color: #fff;
                     border-top-right-radius: 25px;
                     border-bottom-right-radius: 25px;
-                    &:hover{
+
+                    &:hover {
                         color: #212121;
                         background-color: #FF8D1B;
 
@@ -73,24 +87,29 @@
                 }
             }
         }
-        .contact-us-tel{
+
+        .contact-us-tel {
             flex-direction: column;
             align-items: flex-start;
-            .tel-number{
+
+            .tel-number {
                 display: flex;
                 justify-content: space-around;
                 align-items: center;
-                img{
+
+                img {
                     width: 13px;
                     height: 16px;
                     margin: 0;
                 }
-                span{
+
+                span {
                     margin-left: 16px;
                 }
 
             }
-            button{
+
+            button {
                 width: 65%;
                 height: 34px;
                 border: none;
@@ -99,20 +118,21 @@
                 text-transform: uppercase;
                 font-weight: bold;
                 font-size: 18px;
-                &:hover{
+
+                &:hover {
                     color: #EFEFEF;
                     background-color: #212121;
                 }
             }
-          
+
         }
     }
 }
 
 
 @media only screen and (max-width: 1467px) {
-    .header{
-        .header-items{
+    .header {
+        .header-items {
             width: 78%;
         }
     }
@@ -120,12 +140,13 @@
 }
 
 
-@media only screen and (max-width:1127px){
-    .header{
-        .header-items{
+@media only screen and (max-width:1127px) {
+    .header {
+        .header-items {
             width: 90%;
-            .header-slice{
-                form{
+
+            .header-slice {
+                form {
                     width: 350px;
                 }
             }
@@ -133,23 +154,26 @@
     }
 }
 
-@media only screen and (max-width:900px){
-    .header{
-        .header-items{
+@media only screen and (max-width:900px) {
+    .header {
+        .header-items {
             width: 90%;
-            .header-slice{
-                form{
+
+            .header-slice {
+                form {
                     width: 280px;
                 }
 
             }
-            .contact-us-tel{
-                .tel-number{
-                    span{
+
+            .contact-us-tel {
+                .tel-number {
+                    span {
                         font-size: 12px;
                     }
                 }
-                button{
+
+                button {
                     width: 45%;
                     font-size: 16px;
                 }
@@ -159,12 +183,13 @@
     }
 }
 
-@media only screen and(max-width:694px){
-    .header{
-        .header-items{
+@media only screen and(max-width:694px) {
+    .header {
+        .header-items {
             width: 100%;
-            .header-slice{
-                form{
+
+            .header-slice {
+                form {
                     width: 300px;
                 }
 

@@ -1,13 +1,22 @@
 import { AsideSimilarMovie } from "../AsideSimilarMovie/AsideSimilarMovie";
 import { CommentsBar } from "../commentsBar/CommentsBar";
 import "./FilmPage.scss";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { MoviesSection } from "../moviesSection/MoviesSection";
 import { CarouselHomeFilms } from "../carouselHomeFilms/CarouselHomeFilms";
 import { FilterMenuBar } from "../FilterMenuBar/FilterMenuBar";
+import { useDispatch } from "react-redux";
+import { setFilmView } from "./../../features/films/premiresFilmSlice";
 export const FilmPage = ({ film }) => {
   const [videoPlay, setVideoPlay] = useState(false);
   const [isTrailer, setIstrailer] = useState(true);
+  const [currentTime, setCurrentTime] = useState(0);
+  const dispatch = useDispatch();
+  useEffect(() => {
+    if (currentTime) {
+      dispatch(setFilmView(film.id));
+    }
+  }, [currentTime]);
   const filterManu = [
     {
       name: "Trailer",
@@ -48,7 +57,9 @@ export const FilmPage = ({ film }) => {
                       <img src={film.cardImg} alt="" className="mt-3" />
                       <button
                         className="play fa-solid fa-circle-play btn"
-                        onClick={() => setVideoPlay(true)}
+                        onClick={() => {
+                          setVideoPlay(true);
+                        }}
                       ></button>
                     </>
                   ) : (
@@ -72,6 +83,15 @@ export const FilmPage = ({ film }) => {
                     </>
                   ) : (
                     <video
+                      onTimeUpdate={(e) => {
+                        if (
+                          Math.ceil(e.target.currentTime / 60) ===
+                            Math.ceil(e.target.duration / 120) &&
+                          !currentTime
+                        ) {
+                          setCurrentTime(e.target.currentTime);
+                        }
+                      }}
                       width="100%"
                       src={film.video}
                       controls={true}

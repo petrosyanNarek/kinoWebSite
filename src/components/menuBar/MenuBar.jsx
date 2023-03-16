@@ -40,9 +40,6 @@ export const MenuBar = () => {
         <li>
           <Link to={"tvseries"}>TV-Series</Link>
         </li>
-        <li>
-          <Link to={"news"}>News</Link>
-        </li>
         <li className="dropDown">
           <p>
             Country <b className="caret"></b>
@@ -58,12 +55,6 @@ export const MenuBar = () => {
               })}
             </div>
           </div>
-        </li>
-        <li>
-          <Link to={"shortCodes"}>Short Codes</Link>
-        </li>
-        <li>
-          <Link to={"afromz"}>A-Z List</Link>
         </li>
       </ul>
     </div>

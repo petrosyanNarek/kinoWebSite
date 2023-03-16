@@ -49,18 +49,18 @@ export const SpecialFilms = () => {
 
   return (
     <MoviesSection name="FEATURED MOVIES">
-      {specialFilmsLoading ? (
-        <LoadingSpinner />
-      ) : specialError ? (
-        <Navigate to="/error500" replace={true} />
-      ) : (
-        <div className="container mb-5 d-flex justify-content-center">
-          <div className="special-film">
-            <FilterMenuBar filterManu={filterManu} getFilms={getDefoultFilms} />
+      <div className="container mb-5 d-flex justify-content-center">
+        <div className="special-film">
+          <FilterMenuBar filterManu={filterManu} getFilms={getDefoultFilms} />
+          {specialFilmsLoading ? (
+            <LoadingSpinner />
+          ) : specialError ? (
+            <Navigate to="/error500" replace={true} />
+          ) : (
             <FilteredMovies specialFilms={specialFilms} />
-          </div>
+          )}
         </div>
-      )}
+      </div>
     </MoviesSection>
   );
 };

@@ -58,18 +58,18 @@ export const TvSeriesDashBoard = () => {
   }, [dispatch]);
   return (
     <MoviesSection name="Tv Series">
-      {specialFilmsLoading ? (
-        <LoadingSpinner />
-      ) : specialFilmsError ? (
-        <Navigate to="/error500" replace={true} />
-      ) : (
-        <div className="container mb-5 d-flex justify-content-center">
-          <div className="tv-series">
-            <FilterMenuBar filterManu={filterManu} getFilms={getDefoultFilms} />
+      <div className="container mb-5 d-flex justify-content-center">
+        <div className="tv-series">
+          <FilterMenuBar filterManu={filterManu} getFilms={getDefoultFilms} />
+          {specialFilmsLoading ? (
+            <LoadingSpinner />
+          ) : specialFilmsError ? (
+            <Navigate to="/error500" replace={true} />
+          ) : (
             <FilteredMovies specialFilms={specialFilms} />
-          </div>
+          )}
         </div>
-      )}
+      </div>
     </MoviesSection>
   );
 };

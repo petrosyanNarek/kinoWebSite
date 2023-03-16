@@ -76,7 +76,7 @@ export const FilmsByGanre = ({ genreId, countryId, name }) => {
         <MoviesSection
           name={genreId ? genre.name : countryId ? country.name : name}
         >
-          <div className="container mb-5 d-flex justify-content-center">
+          <div className="container mb-5 ">
             <div className="ganere-film">
               <FilteredMovies specialFilms={films} />
               {totalPages.length > 1 && (

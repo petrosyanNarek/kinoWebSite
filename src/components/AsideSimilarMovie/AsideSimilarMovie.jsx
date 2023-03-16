@@ -2,6 +2,7 @@ import { useSelector } from "react-redux";
 import { selectSimilarFilm } from "../../features/films/premiresFilmSlice";
 import "./AsideSimilarMovie.scss";
 import { Link } from "react-router-dom";
+
 export const AsideSimilarMovie = () => {
   const similarFilms = useSelector(selectSimilarFilm);
   return (

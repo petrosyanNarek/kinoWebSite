@@ -1,4 +1,5 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import axios from "axios";
 import { api } from "../../api";
 
 const initialState = {
@@ -70,6 +71,22 @@ export const getSeriaByid = createAsyncThunk(
       return item.data;
     } catch (error) {
       return rejectWithValue(error);
+    }
+  }
+);
+
+export const setFilmView = createAsyncThunk(
+  "film/setFilmViw",
+  async function (id, { rejectWithValue }) {
+    const item = await axios.get("https://api.ipify.org?format=json");
+    const ip = item.data.ip;
+    if (ip) {
+      await api.get("filmview/add", {
+        headers: {
+          id,
+          ip,
+        },
+      });
     }
   }
 );
