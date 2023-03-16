@@ -8,7 +8,7 @@ const initialState = {
   loading: false,
   error: null,
   loadingFilm: false,
-  errorFilm: null,
+  loadingSeries: false,
 };
 
 export const getPremiresFilms = createAsyncThunk(
@@ -100,23 +100,23 @@ const premireFilmSlice = createSlice({
       })
       .addCase(getFilmByid.rejected, (state, action) => {
         state.loadingFilm = false;
-        state.errorFilm = action.payload.message;
+        state.error = action.payload.message;
       })
       .addCase(getFilmByid.fulfilled, (state, action) => {
         state.loadingFilm = false;
-        state.errorFilm = false;
+        state.error = null;
         state.film = action.payload;
       })
       .addCase(getSeriaByid.pending, (state, action) => {
-        state.loadingFilm = true;
+        state.loading = true;
       })
       .addCase(getSeriaByid.rejected, (state, action) => {
-        state.loadingFilm = false;
-        state.errorFilm = action.payload.message;
+        state.loading = false;
+        state.error = action.payload.message;
       })
       .addCase(getSeriaByid.fulfilled, (state, action) => {
-        state.loadingFilm = false;
-        state.errorFilm = false;
+        state.loading = false;
+        state.error = null;
         state.film = action.payload;
       });
   },
