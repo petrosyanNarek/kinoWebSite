@@ -133,6 +133,7 @@ export const MyModal = ({ setIsLogin }) => {
                           )}
                         </>
                       )}
+
                       <input
                         {...register("email")}
                         placeholder="Email Address"

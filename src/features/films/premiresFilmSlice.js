@@ -109,7 +109,8 @@ const premireFilmSlice = createSlice({
   reducers: {
     addComment: (state, action) => {
       console.log(action.payload);
-      // state.film.comments.unshift({});
+      const data = new Date()
+      state.film.comments.unshift({ ...action.payload, createdAt: data.toString(), positiveRating: 0, negativeRating: 0, id: Date.now() });
     },
   },
   extraReducers: (builder) => {

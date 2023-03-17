@@ -5,10 +5,11 @@ export const AllComments = () => {
   const comments = useSelector(selectFilm).comments;
   return (
     <div className="all-comments mt-5">
+
       {comments?.map((comment) => {
         return (
-          <div className="comment-item mb-4">
-            <h5>{comment.user.id}</h5>
+          <div className="comment-item mb-4" key={comment.id}>
+            <h5>{comment.user.fullName}</h5>
             <div className="comment-user-avatar">
               <img
                 src="https://p.w3layouts.com/demos/aug-2016/24-08-2016/one_movies/web/images/user.jpg"

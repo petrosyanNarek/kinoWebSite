@@ -1,15 +1,24 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import "./HeaderBar.scss";
 import { Link, useNavigate } from "react-router-dom";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { MyModal } from "../UI/myModal/MyModal";
-import { logOut } from "../../features/user/userSlice";
+import { getUser, logOut } from "../../features/user/userSlice";
 import { useDispatch } from "react-redux";
 export const Header = () => {
   const navigate = useNavigate();
   const [searchParams, setSearchParams] = useState("");
   const dispatch = useDispatch();
   const [isLogin, setIsLogin] = useState(false);
+  useEffect(() => {
+    dispatch(getUser(localStorage.getItem("id"))).unwrap().then(e => {
+      if (e.id) {
+        setIsLogin(true)
+      } else {
+        setIsLogin(false)
+      }
+    })
+  }, [dispatch])
   return (
     <>
       <div className="header">

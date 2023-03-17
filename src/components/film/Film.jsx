@@ -1,20 +1,5 @@
 import { Link } from "react-router-dom";
 import "./Film.scss";
-export const checkFilmName = (film) => {
-  if (film?.nameEn) {
-    return film?.nameEn.length > 12
-      ? film?.nameEn.slice(0, 12) + "..."
-      : film?.nameEn;
-  } else if (film?.nameRu) {
-    return film?.nameRu?.length > 12
-      ? film?.nameRu.slice(0, 12) + "..."
-      : film?.nameRu;
-  } else {
-    return film?.nameOriginal.length > 12
-      ? film?.nameOriginal.slice(0, 12) + "..."
-      : film?.nameOriginal;
-  }
-};
 export const Film = ({ film }) => {
   return (
     <div className="col film">
@@ -45,8 +30,8 @@ export const Film = ({ film }) => {
               {film.createdYear
                 ? film.createdYear
                 : film.sezon
-                ? ` Sezon : ${film.sezon}  Part : ${film.part}`
-                : `Part : ${film.part}`}
+                  ? ` Sezon : ${film.sezon}  Part : ${film.part}`
+                  : `Part : ${film.part}`}
             </p>
             <div className="rating">
               {[...Array(5)].map((e, i) => {
@@ -54,7 +39,7 @@ export const Film = ({ film }) => {
                   return (
                     <i className="fa fa-star" aria-hidden="true" key={i}></i>
                   );
-                } else if (film.rating + 0.5 === i + 1) {
+                } else if (film.rating >= i + 0.5 && film.rating < i + 1) {
                   return (
                     <i
                       className="fa fa-star-half-o"
