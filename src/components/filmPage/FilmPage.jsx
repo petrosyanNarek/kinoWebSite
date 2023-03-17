@@ -7,6 +7,7 @@ import { CarouselHomeFilms } from "../carouselHomeFilms/CarouselHomeFilms";
 import { FilterMenuBar } from "../FilterMenuBar/FilterMenuBar";
 import { useDispatch } from "react-redux";
 import { setFilmView } from "./../../features/films/premiresFilmSlice";
+import { AboutFilm } from "../abouteFilm/AboutFilm";
 export const FilmPage = ({ film }) => {
   const [videoPlay, setVideoPlay] = useState(false);
   const [isTrailer, setIstrailer] = useState(true);
@@ -16,7 +17,7 @@ export const FilmPage = ({ film }) => {
     if (currentTime) {
       dispatch(setFilmView(film.id));
     }
-  }, [currentTime]);
+  }, [currentTime, dispatch, film.id]);
   const filterManu = [
     {
       name: "Trailer",
@@ -36,16 +37,21 @@ export const FilmPage = ({ film }) => {
           <div className="row film-all-bar">
             <div className="col-lg-8 film-play h-50">
               <h1>{film.name}</h1>
-              <p className="display-6">
+              <p className="display-7">
                 {film.sezon
                   ? ` Sezon : ${film.sezon}  Part : ${film.part}`
                   : film.part
                   ? `Part : ${film.part}`
                   : ""}
               </p>
+
               <div className="mx-3">
                 <FilterMenuBar
-                  filterManu={filterManu}
+                  filterManu={
+                    film.categoryId === 1 || film.filmId
+                      ? filterManu
+                      : [filterManu[0]]
+                  }
                   setIstrailer={setIstrailer}
                   setVideoPlay={setVideoPlay}
                 />
@@ -100,6 +106,7 @@ export const FilmPage = ({ film }) => {
                   )}
                 </div>
               )}
+              <AboutFilm film={film} />
               <CommentsBar />
             </div>
             <div className="col-lg-4 aside-similar-movie mt-2">

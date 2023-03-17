@@ -47,7 +47,9 @@ export const Header = () => {
             />
             <span>(+000) 123 345 653</span>
           </div>
-          <button>LOGIN</button>
+          <button data-bs-toggle="modal" data-bs-target="#exampleModal">
+            LOGIN
+          </button>
         </div>
       </div>
     </div>
