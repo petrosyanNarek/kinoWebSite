@@ -1,30 +1,36 @@
 import { Field, Form, Formik } from "formik";
 import * as yup from "yup";
-const phoneRegExp =
-  /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/;
+import { useDispatch } from "react-redux";
+import { useEffect } from "react";
+import {
+  addComment,
+  addFilmComment,
+} from "../../features/films/premiresFilmSlice";
+import { getUser } from "../../features/user/userSlice";
+import { useParams } from "react-router-dom";
 const CommentsSchema = yup.object().shape({
-  name: yup.string().required("Name is a required !!!"),
-  email: yup
-    .string()
-    .email("Type must been email type")
-    .required("Email is a required !!!"),
-  phone: yup.string().min(8).matches(phoneRegExp, "Phone number is not valid"),
   message: yup.string().required("Message is a required !!!"),
 });
 export const AddComents = () => {
+  const dispatch = useDispatch();
+  const id = useParams().id;
+  console.log(id);
   return (
     <div className="addComents">
       <p>Comments</p>
       <Formik
         initialValues={{
-          name: "",
-          email: "",
-          phone: "",
           message: "",
         }}
         validationSchema={CommentsSchema}
         onSubmit={async (values, { resetForm }) => {
           console.log(values);
+          dispatch(getUser(localStorage.getItem("id")))
+            .unwrap()
+            .then((e) => {
+              dispatch(addComment({ ...values, ...e }));
+              // dispatch(addFilmComment({ ...values }));
+            });
           resetForm();
         }}
       >
@@ -32,48 +38,8 @@ export const AddComents = () => {
           <Form>
             <div className="group">
               <div>
-                <Field
-                  placeholder="Name..."
-                  name="name"
-                  className="input-field"
-                />
-                {touched.name && errors.name && (
-                  <div className="errors-validate">{errors.name}</div>
-                )}
-              </div>
-            </div>
-            <div className="group">
-              <div>
-                <Field
-                  placeholder="Email"
-                  name="email"
-                  className="input-field"
-                />
-                {touched.email && errors.email && (
-                  <div className="errors-validate">{errors.email}</div>
-                )}
-              </div>
-            </div>
-            <div className="group">
-              <div>
-                <Field
-                  placeholder="Phone(77-123-456)"
-                  name="phone"
-                  className="input-field"
-                />
-                {touched.phone && errors.phone && (
-                  <div className="errors-validate">{errors.phone}</div>
-                )}
-              </div>
-            </div>
-            <div className="group">
-              <div>
                 <Field name="message">
-                  {({
-                    field, // { name, value, onChange, onBlur }
-                    form: { touched, errors }, // also values, setXXXX, handleXXXX, dirty, isValid, status, etc.
-                    meta,
-                  }) => (
+                  {({ field, form: { touched, errors } }) => (
                     <div>
                       <textarea
                         placeholder="Message"

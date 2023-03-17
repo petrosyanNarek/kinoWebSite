@@ -12,6 +12,7 @@ export const FilmPage = ({ film }) => {
   const [videoPlay, setVideoPlay] = useState(false);
   const [isTrailer, setIstrailer] = useState(true);
   const [currentTime, setCurrentTime] = useState(0);
+
   const dispatch = useDispatch();
   useEffect(() => {
     if (currentTime) {
@@ -113,7 +114,7 @@ export const FilmPage = ({ film }) => {
               <AsideSimilarMovie similarMovie={film} />
             </div>
           </div>
-          {film.series && film.series.length && (
+          {film.series && film.series?.length > 0 && (
             <MoviesSection name={film.name + " series"}>
               <CarouselHomeFilms films={film.series} />
             </MoviesSection>

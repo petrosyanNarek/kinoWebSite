@@ -1,13 +1,18 @@
 import "./modal.scss";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { loginSchema } from "./../../../validations/loginValidation";
 import { registerSchema } from "../../../validations/registrValidation";
-
-export const MyModal = () => {
-  const [login, sertLogin] = useState(true);
-
+import { useDispatch } from "react-redux";
+import { loginUser, registration } from "../../../features/user/userSlice";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+export const MyModal = ({ setIsLogin }) => {
+  const closeBtn = useRef();
+  const [login, setLogin] = useState(true);
+  const dispatch = useDispatch();
+  const [message, setMessage] = useState("");
   const {
     register,
     handleSubmit,
@@ -16,14 +21,48 @@ export const MyModal = () => {
   } = useForm({
     resolver: yupResolver(login ? loginSchema : registerSchema),
   });
-
   const onSubmitHandler = (data) => {
     if (login) {
-      console.log(data, "login");
+      dispatch(loginUser(data))
+        .unwrap()
+        .then((r) => {
+          if (r.verify) {
+            localStorage.setItem("id", r.user.id);
+            setIsLogin(true);
+            closeBtn.current.click();
+          } else {
+            setMessage(r.error);
+          }
+        })
+        .catch((e) => {
+          toast.error(e.message, {
+            position: "top-center",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "colored",
+          });
+        });
     } else {
-      console.log(data, "register");
+      dispatch(registration(data))
+        .unwrap()
+        .then((e) => {
+          setMessage(e);
+          setTimeout(() => {
+            reset();
+            setLogin(true);
+          }, 1500);
+        })
+        .catch((e) => {
+          setMessage(e);
+        });
+      setTimeout(() => {
+        setMessage("");
+      }, 2500);
     }
-    reset();
   };
   return (
     <div
@@ -47,6 +86,7 @@ export const MyModal = () => {
               className="btn-close"
               data-bs-dismiss="modal"
               aria-label="Close"
+              ref={closeBtn}
             ></button>
           </div>
 
@@ -58,7 +98,7 @@ export const MyModal = () => {
                     className="toggle"
                     onClick={() => {
                       reset();
-                      sertLogin(!login);
+                      setLogin(!login);
                     }}
                   >
                     <i
@@ -97,8 +137,8 @@ export const MyModal = () => {
                         {...register("email")}
                         placeholder="Email Address"
                       />
-                      {touchedFields.fullName && errors.fullName?.message && (
-                        <div className="errors">{errors.fullName?.message}</div>
+                      {touchedFields.email && errors.email?.message && (
+                        <div className="errors">{errors.email?.message}</div>
                       )}
                       <input
                         {...register("password")}
@@ -110,9 +150,13 @@ export const MyModal = () => {
                       )}
                       <input type="submit" value="submit" />
                     </form>
+                    <p className="text-center text-danger fw-bold">{message}</p>
                   </div>
                 </div>
               </div>
+            </div>
+            <div>
+              <ToastContainer />
             </div>
           </section>
         </div>

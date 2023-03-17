@@ -5,6 +5,7 @@ import specailFilmsSlice from "./../features/specialFilms/specialFilmSlice";
 import genreSlice from "../features/genres/genre";
 import countriesSlice from "../features/countries/countriesSlice";
 import popularMowiesSlice from "./../features/popularMowies/popularMowies";
+import loginSlice from "./../features/user/userSlice";
 export const store = configureStore({
   reducer: {
     premireFilms: premiresFilmSlice,
@@ -13,5 +14,6 @@ export const store = configureStore({
     genres: genreSlice,
     countries: countriesSlice,
     popularMowies: popularMowiesSlice,
+    login: loginSlice,
   },
 });

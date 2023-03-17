@@ -52,7 +52,19 @@ export const getFilmByid = createAsyncThunk(
       });
       return item.data;
     } catch (error) {
-      console.log(error);
+      return rejectWithValue(error);
+    }
+  }
+);
+
+export const addFilmComment = createAsyncThunk(
+  "film/addFilmComment",
+
+  async function (comment, { rejectWithValue }) {
+    try {
+      const item = await api.post("comment/newComment", comment);
+      return item.data;
+    } catch (error) {
       return rejectWithValue(error);
     }
   }
@@ -94,7 +106,12 @@ export const setFilmView = createAsyncThunk(
 const premireFilmSlice = createSlice({
   name: "premiresFilm",
   initialState,
-  reducers: {},
+  reducers: {
+    addComment: (state, action) => {
+      console.log(action.payload);
+      // state.film.comments.unshift({});
+    },
+  },
   extraReducers: (builder) => {
     builder
       .addCase(getPremiresFilms.pending, (state, action) => {
@@ -149,3 +166,4 @@ export const selectFilm = (state) => state.premireFilms.film;
 export const selectSimilarFilm = (state) => state.premireFilms.similarMovie;
 
 export default premireFilmSlice.reducer;
+export const { addComment } = premireFilmSlice.actions;
