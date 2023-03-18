@@ -108,9 +108,22 @@ const premireFilmSlice = createSlice({
   initialState,
   reducers: {
     addComment: (state, action) => {
-      console.log(action.payload);
-      const data = new Date()
-      state.film.comments.unshift({ ...action.payload, createdAt: data.toString(), positiveRating: 0, negativeRating: 0, id: Date.now() });
+      const data = new Date();
+      state.film.comments.push({
+        ...action.payload,
+        createdAt: data.toString(),
+        positiveRating: 0,
+        negativeRating: 0,
+        id: Date.now(),
+      });
+    },
+    setCommentRating: (state, action) => {
+      const newComment = state.film.comments.find(
+        (e) => e.id === action.payload.id
+      );
+      newComment[action.payload.rating] = newComment[action.payload.rating]
+        ? newComment[action.payload.rating] + 1
+        : 1;
     },
   },
   extraReducers: (builder) => {
@@ -167,4 +180,4 @@ export const selectFilm = (state) => state.premireFilms.film;
 export const selectSimilarFilm = (state) => state.premireFilms.similarMovie;
 
 export default premireFilmSlice.reducer;
-export const { addComment } = premireFilmSlice.actions;
+export const { addComment, setCommentRating } = premireFilmSlice.actions;

@@ -3,11 +3,16 @@ import { useDispatch, useSelector } from "react-redux";
 import ReactStars from "react-rating-stars-component";
 import {
   addComment,
+  addFilmComment,
 } from "../../features/films/premiresFilmSlice";
-import { selectLoginUser } from "../../features/user/userSlice";
+import { getUser, selectLoginUser } from "../../features/user/userSlice";
 import { useParams, useSearchParams } from "react-router-dom";
 import { Controller, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { useEffect } from "react";
+
 const CommentsSchema = yup.object().shape({
   message: yup.string().required("Message is a required !!!"),
   // rating: yup.number().min(0.5).max(5).required()
@@ -15,10 +20,10 @@ const CommentsSchema = yup.object().shape({
 
 export const AddComents = () => {
   const dispatch = useDispatch();
-  const filmId = useParams().id;
+  const filmId = +useParams().id;
   const [searchParams] = useSearchParams();
-  const seriaId = searchParams.get("seriaId");
-  const user = useSelector(selectLoginUser)
+  const seriesId = +searchParams.get("seriaId");
+
   const {
     register,
     handleSubmit,
@@ -27,23 +32,40 @@ export const AddComents = () => {
     reset,
     control,
     formState: { errors, touchedFields },
-
   } = useForm({
     resolver: yupResolver(CommentsSchema),
     defaultValues: {
-      rating: 0
-    }
+      rating: 0,
+    },
   });
   const onSubmitHandler = (data) => {
-    if (filmId) {
-      console.log();
+    if (localStorage.getItem("id")) {
+      dispatch(getUser(localStorage.getItem("id")))
+        .unwrap()
+        .then((user) => {
+          if (filmId) {
+            dispatch(addFilmComment({ ...data, filmId, userId: user.id }));
+            dispatch(addComment({ ...data, user, filmId }));
+          } else {
+            dispatch(addFilmComment({ ...data, seriesId, userId: user.id }));
+            dispatch(addComment({ ...data, user }));
+          }
+        });
+      reset();
     } else {
-
-      console.log({ ...data, user, seriaId });
+      toast.error("Sign in to add a comment", {
+        position: "top-center",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
     }
-    dispatch(addComment({ ...data, user, filmId }))
-    reset()
-  }
+  };
+
   return (
     <div className="addComents">
       <p>Add New Comments</p>
@@ -58,9 +80,11 @@ export const AddComents = () => {
                 return (
                   <>
                     <ReactStars
+                      key={getValues("rating")}
+                      edit={true}
                       count={5}
                       onChange={(e) => {
-                        setValue("rating", +e)
+                        setValue("rating", +e);
                       }}
                       value={getValues("rating")}
                       size={24}
@@ -69,7 +93,6 @@ export const AddComents = () => {
                       halfIcon={<i className="fa fa-star-half-alt"></i>}
                       fullIcon={<i className="fa fa-star"></i>}
                       activeColor="#ffd700"
-
                     />
                   </>
                 );
@@ -85,12 +108,9 @@ export const AddComents = () => {
               name="message"
               className="text-area-field"
             />
-            {touchedFields.message &&
-              errors.message?.message && (
-                <div className="errors">
-                  {errors.message?.message}
-                </div>
-              )}
+            {touchedFields.message && errors.message?.message && (
+              <div className="errors">{errors.message?.message}</div>
+            )}
           </div>
         </div>
 
@@ -100,6 +120,9 @@ export const AddComents = () => {
           </button>
         </div>
       </form>
+      <div>
+        <ToastContainer />
+      </div>
     </div>
   );
 };
