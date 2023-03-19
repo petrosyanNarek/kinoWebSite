@@ -70,6 +70,19 @@ export const addFilmComment = createAsyncThunk(
   }
 );
 
+export const addCommentAnwser = createAsyncThunk(
+  "film/addCommentAnwser",
+
+  async function (comment, { rejectWithValue }) {
+    try {
+      const item = await api.post("commentAnwser/newComment", { comment });
+      return item.data;
+    } catch (error) {
+      return rejectWithValue(error);
+    }
+  }
+);
+
 export const getSeriaByid = createAsyncThunk(
   "film/getSeriaById",
 
@@ -89,16 +102,30 @@ export const getSeriaByid = createAsyncThunk(
 
 export const setFilmView = createAsyncThunk(
   "film/setFilmViw",
-  async function (id, { rejectWithValue }) {
+  async function ({ filmId, seriaId }, { rejectWithValue }) {
+    console.log(filmId, seriaId);
     const item = await axios.get("https://api.ipify.org?format=json");
     const ip = item.data.ip;
     if (ip) {
       await api.get("filmview/add", {
         headers: {
-          id,
+          film_id: filmId,
+          serial_id: seriaId,
           ip,
         },
       });
+    }
+  }
+);
+
+export const setFilmCommentRating = createAsyncThunk(
+  "film/setCommentRating",
+  async function (commentRating, { rejectWithValue }) {
+    try {
+      await api.post("commentRating", commentRating);
+
+    } catch (error) {
+      return rejectWithValue(error);
     }
   }
 );
@@ -118,13 +145,39 @@ const premireFilmSlice = createSlice({
       });
     },
     setCommentRating: (state, action) => {
+      const { rating, id, userId } = action.payload
       const newComment = state.film.comments.find(
-        (e) => e.id === action.payload.id
+        (e) => e.id === id
       );
-      newComment[action.payload.rating] = newComment[action.payload.rating]
-        ? newComment[action.payload.rating] + 1
-        : 1;
-    },
+      const ratingCom = newComment.comment_ratings?.find((e => e.userId === userId))
+      if (ratingCom) {
+        if (ratingCom.commentRating === rating) {
+          if (rating) {
+            newComment.commentLike -= 1;
+          } else {
+            newComment.commentDisLike -= 1;
+          }
+          newComment.comment_ratings = newComment.comment_ratings.filter(e => e.id !== ratingCom.id)
+        } else {
+          if (rating) {
+            newComment.commentLike += 1;
+            newComment.commentDisLike -= 1;
+          } else {
+            newComment.commentLike -= 1;
+            newComment.commentDisLike += 1;
+          }
+          ratingCom.commentRating = !ratingCom.commentRating
+        }
+      } else {
+        if (rating) {
+          newComment.commentLike += 1;
+        } else {
+          newComment.commentDisLike += 1;
+        }
+        newComment.comment_ratings.push({ userId: userId, commentRating: rating, commentId: newComment.id })
+      }
+    }
+
   },
   extraReducers: (builder) => {
     builder

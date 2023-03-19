@@ -13,7 +13,7 @@ import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useEffect } from "react";
 
-const CommentsSchema = yup.object().shape({
+export const CommentsSchema = yup.object().shape({
   message: yup.string().required("Message is a required !!!"),
   // rating: yup.number().min(0.5).max(5).required()
 });
@@ -22,7 +22,7 @@ export const AddComents = () => {
   const dispatch = useDispatch();
   const filmId = +useParams().id;
   const [searchParams] = useSearchParams();
-  const seriesId = +searchParams.get("seriaId");
+  const seriesId = +searchParams.get("seria");
 
   const {
     register,

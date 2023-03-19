@@ -8,15 +8,23 @@ import { FilterMenuBar } from "../FilterMenuBar/FilterMenuBar";
 import { useDispatch } from "react-redux";
 import { setFilmView } from "./../../features/films/premiresFilmSlice";
 import { AboutFilm } from "../abouteFilm/AboutFilm";
+import { useParams, useSearchParams } from "react-router-dom";
 export const FilmPage = ({ film }) => {
   const [videoPlay, setVideoPlay] = useState(false);
   const [isTrailer, setIstrailer] = useState(true);
   const [currentTime, setCurrentTime] = useState(0);
+  const [searchParams] = useSearchParams();
+  const seriaId = +searchParams.get("seria");
+  const filmId = +useParams().id;
 
   const dispatch = useDispatch();
   useEffect(() => {
     if (currentTime) {
-      dispatch(setFilmView(film.id));
+      if (filmId) {
+        dispatch(setFilmView({ filmId: filmId, seriaId: null }))
+      } else if (seriaId) {
+        dispatch(setFilmView({ filmId: null, seriaId: seriaId }))
+      }
     }
   }, [currentTime, dispatch, film.id]);
   const filterManu = [
@@ -42,8 +50,8 @@ export const FilmPage = ({ film }) => {
                 {film.sezon
                   ? ` Sezon : ${film.sezon}  Part : ${film.part}`
                   : film.part
-                  ? `Part : ${film.part}`
-                  : ""}
+                    ? `Part : ${film.part}`
+                    : ""}
               </p>
 
               <div className="mx-3">
@@ -93,7 +101,7 @@ export const FilmPage = ({ film }) => {
                       onTimeUpdate={(e) => {
                         if (
                           Math.ceil(e.target.currentTime / 60) ===
-                            Math.ceil(e.target.duration / 120) &&
+                          Math.ceil(e.target.duration / 120) &&
                           !currentTime
                         ) {
                           setCurrentTime(e.target.currentTime);

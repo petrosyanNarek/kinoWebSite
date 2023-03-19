@@ -12,7 +12,7 @@ export const Film = ({ film }) => {
                 to={
                   film.categoryId
                     ? `/film/${film.id}`
-                    : `/film/?seriaId=${film.id}`
+                    : `/film/?seria=${film.id}`
                 }
               >
                 <img

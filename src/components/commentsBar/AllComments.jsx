@@ -1,14 +1,32 @@
 import {
+  addCommentAnwser,
   selectFilm,
   setCommentRating,
+  setFilmCommentRating,
 } from "../../features/films/premiresFilmSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { useState } from "react";
+import { selectLoginUser } from "../../features/user/userSlice";
+import { useForm } from "react-hook-form";
+import { CommentsSchema } from "./AddComents";
+import { yupResolver } from "@hookform/resolvers/yup";
 
 export const AllComments = () => {
   const [raply, setRaply] = useState(0);
   const comments = useSelector(selectFilm).comments;
   const dispatch = useDispatch();
+
+  const {
+    register,
+    handleSubmit,
+    setValue,
+    getValues,
+    reset,
+    control,
+    formState: { errors, touchedFields },
+  } = useForm({
+    resolver: yupResolver(CommentsSchema),
+  });
   return (
     <div className="all-comments mt-5">
       {comments?.map((comment) => {
@@ -27,36 +45,69 @@ export const AllComments = () => {
                 Date : <a href="/"> {comment.createdAt} </a>
               </span>
               <div className="d-flex align-items-center p-2">
-                <p className="my-0">
+                <div className="comment-reaction">
                   <i
-                    className="fa fa-thumbs-up mx-1"
+                    className={comment.comment_ratings.find((e => e.userId === +localStorage.getItem('id') && e.commentRating)) ? "fa fa-thumbs-up text-primary mx-1" : "fa fa-thumbs-up mx-1"}
                     aria-hidden="true"
-                    onClick={() =>
-                      dispatch(
-                        setCommentRating({
-                          id: comment.id,
-                          rating: "positiveRating",
-                        })
-                      )
+                    onClick={() => {
+                      const userId = +localStorage.getItem('id')
+                      if (userId) {
+                        if (!comment.userId) {
+                          dispatch(setFilmCommentRating({ user_id: userId, comment_id: comment.id, rating: true }))
+                        } else {
+                          dispatch(setFilmCommentRating({ user_id: userId, coment_anwser_id: comment.id, rating: true }))
+                        }
+                        dispatch(
+                          setCommentRating({
+                            id: comment.id,
+                            userId: userId,
+                            rating: true,
+                          })
+                        )
+                      }
+
+                    }
                     }
                   ></i>
-                  ({comment.positiveRating})
-                </p>
-                <p className="my-0 mx-4">
+                  <span>
+                    ({comment.commentLike})
+                  </span>
+                  {/* <div className="reaction-list"></div> */}
+                </div>
+                <div className="comment-reaction mx-4">
                   <i
-                    className="fa fa-thumbs-down mx-1"
+                    className={comment?.comment_ratings?.find((e => e.userId === +localStorage.getItem('id') && e.commentRating === false)) ? "fa fa-thumbs-down text-primary mx-1" : "fa fa-thumbs-down mx-1"}
                     aria-hidden="true"
-                    onClick={() =>
-                      dispatch(
-                        setCommentRating({
-                          id: comment.id,
-                          rating: "negativeRating",
-                        })
-                      )
+                    onClick={() => {
+                      const userId = +localStorage.getItem('id')
+                      if (userId) {
+                        if (!comment.userId) {
+                          dispatch(setFilmCommentRating({ user_id: userId, comment_id: comment.id, rating: false }))
+                        } else {
+                          dispatch(setFilmCommentRating({ user_id: userId, coment_anwser_id: comment.id, rating: false }))
+                        }
+                        dispatch(
+                          setCommentRating({
+                            id: comment.id,
+                            userId: userId,
+                            rating: false,
+                          })
+                        )
+                      }
+                    }
                     }
                   ></i>
-                  ({comment.negativeRating})
-                </p>
+                  <span>
+                    ({comment.commentDisLike})
+                  </span>
+                  {/* <div className="reaction-list">
+                    {
+                      comment?.comment_ratings.map(commentRating => {
+                        return <p>{commentRating.user.fullName}</p>
+                      })
+                    }
+                  </div> */}
+                </div>
                 <button
                   className="btn d-flex align-items-center"
                   onClick={() => setRaply(comment.id)}
@@ -67,8 +118,18 @@ export const AllComments = () => {
               </div>
             </div>
             {comment.id === raply && (
-              <input type="text" className="input-field" />
+              <form className="d-flex align-items-cemter" onSubmit={handleSubmit((value) => {
+                dispatch(addCommentAnwser({ ...value, userId: +localStorage.getItem("id"), commentId: comment.id }));
+              })}>
+                <input type="text" className="input-field m-0" name="message" {...register("message")} />
+                <button type="submit" className="send-btn">Send</button>
+              </form>
             )}
+            {touchedFields.message && errors.message?.message && (
+              <div className="errors">{errors.message?.message}</div>
+            )}
+            {comment.commentsAnwsers.length ? <p>{comment?.commentsAnwsers?.length} Comments</p> : ""}
+            <div></div>
           </div>
         );
       })}

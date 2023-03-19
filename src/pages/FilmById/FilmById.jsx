@@ -14,7 +14,7 @@ import { similarFilmsOp } from "../../hooks/createSimilarNowiesOp";
 export const FilmById = () => {
   const filmId = useParams().id;
   const [searchParams] = useSearchParams();
-  const seriaId = searchParams.get("seriaId");
+  const seriaId = searchParams.get("seria");
   const dispatch = useDispatch();
   const film = useSelector(selectFilm);
   useEffect(() => {
