@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import "./Film.scss";
+import { FilmRating } from "./FilmRating";
 export const Film = ({ film }) => {
   return (
     <div className="col film">
@@ -30,30 +31,10 @@ export const Film = ({ film }) => {
               {film.createdYear
                 ? film.createdYear
                 : film.sezon
-                  ? ` Sezon : ${film.sezon}  Part : ${film.part}`
-                  : `Part : ${film.part}`}
+                ? ` Sezon : ${film.sezon}  Part : ${film.part}`
+                : `Part : ${film.part}`}
             </p>
-            <div className="rating">
-              {[...Array(5)].map((e, i) => {
-                if (film.rating >= i + 1) {
-                  return (
-                    <i className="fa fa-star" aria-hidden="true" key={i}></i>
-                  );
-                } else if (film.rating >= i + 0.5 && film.rating < i + 1) {
-                  return (
-                    <i
-                      className="fa fa-star-half-o"
-                      aria-hidden="true"
-                      key={i}
-                    ></i>
-                  );
-                } else {
-                  return (
-                    <i className="fa fa-star-o" aria-hidden="true" key={i}></i>
-                  );
-                }
-              })}
-            </div>
+            <FilmRating rating={film.rating} />
           </div>
         </div>
       </div>

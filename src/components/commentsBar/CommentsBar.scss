@@ -56,7 +56,7 @@
 }
 
 .all-comments {
-    height: 145px;
+    height: 320px;
     overflow-y: scroll;
 
     &::-webkit-scrollbar {
@@ -106,6 +106,10 @@
             }
         }
     }
+
+    .comments-answers-count {
+        cursor: pointer;
+    }
 }
 
 .see-all-btn {
@@ -123,13 +127,13 @@
     align-items: center;
     position: relative;
 
-    div {
-        position: absolute;
-        left: 25px;
-        top: 0;
-        background-color: #ff8d1b;
-        padding: 15px;
-    }
+    // div {
+    //     position: absolute;
+    //     left: 25px;
+    //     top: 0;
+    //     background-color: #ff8d1b;
+    //     padding: 15px;
+    // }
 
     span {
         font-size: 16px;
@@ -139,4 +143,10 @@
 
 .comment-anwswr {
     cursor: pointer;
+}
+
+.comment-answers-list {
+    padding-left: 100px;
+
+
 }

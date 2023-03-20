@@ -4,6 +4,9 @@ import ReactStars from "react-rating-stars-component";
 import {
   addComment,
   addFilmComment,
+  updateFilmRating,
+  updateRating,
+  updateSeriesRating,
 } from "../../features/films/premiresFilmSlice";
 import { getUser, selectLoginUser } from "../../features/user/userSlice";
 import { useParams, useSearchParams } from "react-router-dom";
@@ -11,7 +14,7 @@ import { Controller, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { useEffect } from "react";
+import { selectFilm } from "./../../features/films/premiresFilmSlice";
 
 export const CommentsSchema = yup.object().shape({
   message: yup.string().required("Message is a required !!!"),
@@ -23,7 +26,8 @@ export const AddComents = () => {
   const filmId = +useParams().id;
   const [searchParams] = useSearchParams();
   const seriesId = +searchParams.get("seria");
-
+  const user = useSelector(selectLoginUser);
+  const film = useSelector(selectFilm);
   const {
     register,
     handleSubmit,
@@ -46,10 +50,23 @@ export const AddComents = () => {
           if (filmId) {
             dispatch(addFilmComment({ ...data, filmId, userId: user.id }));
             dispatch(addComment({ ...data, user, filmId }));
+            dispatch(
+              updateFilmRating({
+                id: filmId,
+                rating: (film.rating + data.rating) / 2,
+              })
+            );
           } else {
             dispatch(addFilmComment({ ...data, seriesId, userId: user.id }));
             dispatch(addComment({ ...data, user }));
+            dispatch(
+              updateSeriesRating({
+                id: seriesId,
+                rating: (film.rating + data.rating) / 2,
+              })
+            );
           }
+          dispatch(updateRating((film.rating + data.rating) / 2));
         });
       reset();
     } else {
@@ -81,7 +98,6 @@ export const AddComents = () => {
                   <>
                     <ReactStars
                       key={getValues("rating")}
-                      edit={true}
                       count={5}
                       onChange={(e) => {
                         setValue("rating", +e);
@@ -89,10 +105,10 @@ export const AddComents = () => {
                       value={getValues("rating")}
                       size={24}
                       isHalf={true}
-                      emptyIcon={<i className="far fa-star"></i>}
+                      emptyIcon={<i className="fa fa-star"></i>}
                       halfIcon={<i className="fa fa-star-half-alt"></i>}
                       fullIcon={<i className="fa fa-star"></i>}
-                      activeColor="#ffd700"
+                      activeColor="#ff8d1b"
                     />
                   </>
                 );
@@ -103,8 +119,11 @@ export const AddComents = () => {
         <div className="group">
           <div>
             <textarea
+              placeholder={
+                user.id ? "Youar Message..." : "Login to add comment!"
+              }
+              disabled={user.id ? false : true}
               {...register("message")}
-              placeholder="Youar Message..."
               name="message"
               className="text-area-field"
             />
@@ -115,7 +134,11 @@ export const AddComents = () => {
         </div>
 
         <div className="group">
-          <button type="submit" className="send-btn">
+          <button
+            type="submit"
+            className="send-btn"
+            disabled={user.id ? false : true}
+          >
             SEND
           </button>
         </div>

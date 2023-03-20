@@ -1,3 +1,5 @@
+import { FilmRating } from "../film/FilmRating";
+
 export const AboutFilm = ({ film }) => {
   return (
     <div className="film-section">
@@ -56,7 +58,9 @@ export const AboutFilm = ({ film }) => {
         <dt className="col-sm-3">Description</dt>
         <dd className="col-sm-9">{film.description}</dd>
         <dt className="col-sm-3">Rating</dt>
-        <dd className="col-sm-9">{film.rating}</dd>
+        <dd className="col-sm-9">
+          <FilmRating rating={film.rating} />
+        </dd>
         <dt className="col-sm-3">Views</dt>
         <dd className="col-sm-9">{film.views}</dd>
       </dl>

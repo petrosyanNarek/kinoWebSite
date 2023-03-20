@@ -117,13 +117,42 @@ export const setFilmView = createAsyncThunk(
     }
   }
 );
+export const updateFilmRating = createAsyncThunk(
+  "film/updateFilmRating",
+
+  async function ({ id, rating }, { rejectWithValue }) {
+    try {
+      const item = await api.put("/film/updateFilmRating", {
+        id,
+        rating,
+      });
+      return item.data;
+    } catch (error) {
+      return rejectWithValue(error);
+    }
+  }
+);
+export const updateSeriesRating = createAsyncThunk(
+  "film/updateSeriesRating",
+
+  async function ({ id, rating }, { rejectWithValue }) {
+    try {
+      const item = await api.put("/series/updateFilmRating", {
+        id,
+        rating,
+      });
+      return item.data;
+    } catch (error) {
+      return rejectWithValue(error);
+    }
+  }
+);
 
 export const setFilmCommentRating = createAsyncThunk(
   "film/setCommentRating",
   async function (commentRating, { rejectWithValue }) {
     try {
       await api.post("commentRating", commentRating);
-
     } catch (error) {
       return rejectWithValue(error);
     }
@@ -139,17 +168,101 @@ const premireFilmSlice = createSlice({
       state.film.comments.push({
         ...action.payload,
         createdAt: data.toString(),
-        positiveRating: 0,
-        negativeRating: 0,
+        commentLike: 0,
+        commentDisLike: 0,
         id: Date.now(),
+        comment_ratings: [],
+        commentsAnwsers: [],
       });
     },
-    setCommentRating: (state, action) => {
-      const { rating, id, userId } = action.payload
-      const newComment = state.film.comments.find(
-        (e) => e.id === id
+    updateRating: (state, action) => {
+      state.film.rating = action.payload;
+    },
+    addAnwser: (state, action) => {
+      const { commentId, userId, message, fullName } = action.payload;
+      const data = new Date();
+      const comment = state.film.comments.find(
+        (comment) => comment.id === commentId
       );
-      const ratingCom = newComment.comment_ratings?.find((e => e.userId === userId))
+      comment.commentsAnwsers = comment.commentsAnwsers
+        ? [
+            {
+              commentId,
+              userId,
+              message,
+              createdAt: data.toString(),
+              user: { fullName },
+              commentLike: 0,
+              commentDisLike: 0,
+              id: Date.now(),
+            },
+            ...comment.commentsAnwsers,
+          ]
+        : [
+            {
+              commentId,
+              userId,
+              message,
+              createdAt: data.toString(),
+              user: { fullName },
+              commentLike: 0,
+              commentDisLike: 0,
+              id: Date.now(),
+            },
+          ];
+    },
+    setCommentAnwserRating: (state, action) => {
+      const { rating, commentsAnwserId, userId, commentId } = action.payload;
+      const comment = state.film.comments.find((e) => e.id === commentId);
+      const anwser = comment.commentsAnwsers.find(
+        (e) => e.id === commentsAnwserId
+      );
+      const anwserRating = anwser.comment_ratings?.find(
+        (e) => e.userId === userId
+      );
+
+      if (anwserRating) {
+        if (anwserRating.commentRating === rating) {
+          if (rating) {
+            anwser.commentLike -= 1;
+          } else {
+            anwser.commentDisLike -= 1;
+          }
+          anwser.comment_ratings = anwser.comment_ratings.filter(
+            (e) => e.id !== anwserRating.id
+          );
+        } else {
+          if (rating) {
+            anwser.commentLike += 1;
+            anwser.commentDisLike -= 1;
+          } else {
+            anwser.commentLike -= 1;
+            anwser.commentDisLike += 1;
+          }
+          anwserRating.commentRating = !anwserRating.commentRating;
+        }
+      } else {
+        if (rating) {
+          anwser.commentLike += 1;
+        } else {
+          anwser.commentDisLike += 1;
+        }
+        anwser.comment_ratings = [
+          {
+            userId: userId,
+            commentRating: rating,
+            commentsAnwserId: anwser.id,
+          },
+          ...anwser.comment_ratings,
+        ];
+      }
+    },
+    setCommentRating: (state, action) => {
+      const { rating, id, userId } = action.payload;
+      const newComment = state.film.comments.find((e) => e.id === id);
+      const ratingCom = newComment.comment_ratings?.find(
+        (e) => e.userId === userId
+      );
       if (ratingCom) {
         if (ratingCom.commentRating === rating) {
           if (rating) {
@@ -157,7 +270,9 @@ const premireFilmSlice = createSlice({
           } else {
             newComment.commentDisLike -= 1;
           }
-          newComment.comment_ratings = newComment.comment_ratings.filter(e => e.id !== ratingCom.id)
+          newComment.comment_ratings = newComment.comment_ratings.filter(
+            (e) => e.id !== ratingCom.id
+          );
         } else {
           if (rating) {
             newComment.commentLike += 1;
@@ -166,7 +281,7 @@ const premireFilmSlice = createSlice({
             newComment.commentLike -= 1;
             newComment.commentDisLike += 1;
           }
-          ratingCom.commentRating = !ratingCom.commentRating
+          ratingCom.commentRating = !ratingCom.commentRating;
         }
       } else {
         if (rating) {
@@ -174,10 +289,16 @@ const premireFilmSlice = createSlice({
         } else {
           newComment.commentDisLike += 1;
         }
-        newComment.comment_ratings.push({ userId: userId, commentRating: rating, commentId: newComment.id })
+        newComment.comment_ratings = [
+          {
+            userId: userId,
+            commentRating: rating,
+            commentId: newComment.id,
+          },
+          ...newComment.comment_ratings,
+        ];
       }
-    }
-
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -233,4 +354,10 @@ export const selectFilm = (state) => state.premireFilms.film;
 export const selectSimilarFilm = (state) => state.premireFilms.similarMovie;
 
 export default premireFilmSlice.reducer;
-export const { addComment, setCommentRating } = premireFilmSlice.actions;
+export const {
+  addComment,
+  setCommentRating,
+  addAnwser,
+  setCommentAnwserRating,
+  updateRating,
+} = premireFilmSlice.actions;

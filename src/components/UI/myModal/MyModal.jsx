@@ -5,7 +5,11 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { loginSchema } from "./../../../validations/loginValidation";
 import { registerSchema } from "../../../validations/registrValidation";
 import { useDispatch } from "react-redux";
-import { getUser, loginUser, registration } from "../../../features/user/userSlice";
+import {
+  getUser,
+  loginUser,
+  registration,
+} from "../../../features/user/userSlice";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 export const MyModal = ({ setIsLogin }) => {
@@ -30,7 +34,7 @@ export const MyModal = ({ setIsLogin }) => {
             localStorage.setItem("id", r.user.id);
             setIsLogin(true);
             closeBtn.current.click();
-            dispatch(getUser(r.id))
+            dispatch(getUser(r.user.id));
           } else {
             setMessage(r.error);
           }
