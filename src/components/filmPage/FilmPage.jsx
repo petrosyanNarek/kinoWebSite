@@ -70,8 +70,8 @@ export const FilmPage = ({ film }) => {
                     {film.sezon
                       ? ` Sezon : ${film.sezon}  Part : ${film.part}`
                       : film.part
-                      ? `Part : ${film.part}`
-                      : ""}
+                        ? `Part : ${film.part}`
+                        : ""}
                   </p>
 
                   <div className="mx-3">
@@ -121,7 +121,7 @@ export const FilmPage = ({ film }) => {
                           onTimeUpdate={(e) => {
                             if (
                               Math.ceil(e.target.currentTime / 60) ===
-                                Math.ceil(e.target.duration / 120) &&
+                              Math.ceil(e.target.duration / 120) &&
                               !currentTime
                             ) {
                               setCurrentTime(e.target.currentTime);

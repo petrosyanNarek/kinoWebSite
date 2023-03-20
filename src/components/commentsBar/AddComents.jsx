@@ -15,11 +15,15 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { selectFilm } from "./../../features/films/premiresFilmSlice";
+import io from "socket.io-client"
+import { useEffect, useState } from "react";
 
 export const CommentsSchema = yup.object().shape({
   message: yup.string().required("Message is a required !!!"),
   // rating: yup.number().min(0.5).max(5).required()
 });
+const socket = io.connect("http://localhost:3000")
+
 
 export const AddComents = () => {
   const dispatch = useDispatch();
@@ -28,6 +32,7 @@ export const AddComents = () => {
   const seriesId = +searchParams.get("seria");
   const user = useSelector(selectLoginUser);
   const film = useSelector(selectFilm);
+  const [room, setRoom] = useState("")
   const {
     register,
     handleSubmit,
@@ -42,12 +47,34 @@ export const AddComents = () => {
       rating: 0,
     },
   });
+
+
+
+  useEffect(() => {
+    if (filmId) {
+      socket.emit("join_room", `film${filmId}`)
+    } else {
+      socket.emit("join_room", `seria${seriesId}`)
+    }
+  }, [filmId, seriesId])
+
+  useEffect(() => {
+    socket.on("receive_message", (data) => {
+      const { room, ...newCom } = data
+      dispatch(addComment(newCom));
+    })
+  }, [socket])
+
+
+
+
   const onSubmitHandler = (data) => {
     if (localStorage.getItem("id")) {
       dispatch(getUser(localStorage.getItem("id")))
         .unwrap()
         .then((user) => {
           if (filmId) {
+            socket.emit("send_message", { ...data, user, filmId, room: `film${filmId}` })
             dispatch(addFilmComment({ ...data, filmId, userId: user.id }));
             dispatch(addComment({ ...data, user, filmId }));
             dispatch(
@@ -57,6 +84,7 @@ export const AddComents = () => {
               })
             );
           } else {
+            socket.emit("send_message", { ...data, user, seriesId, room: `seria${seriesId}` })
             dispatch(addFilmComment({ ...data, seriesId, userId: user.id }));
             dispatch(addComment({ ...data, user }));
             dispatch(

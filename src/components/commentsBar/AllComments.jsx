@@ -7,16 +7,39 @@ import {
   setFilmCommentRating,
 } from "../../features/films/premiresFilmSlice";
 import { useDispatch, useSelector } from "react-redux";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { selectLoginUser } from "../../features/user/userSlice";
 import { useForm } from "react-hook-form";
 import { CommentsSchema } from "./AddComents";
 import { yupResolver } from "@hookform/resolvers/yup";
+import io from "socket.io-client"
+import { useParams, useSearchParams } from "react-router-dom";
+
+const socket = io.connect("http://localhost:3000")
 
 export const AllComments = () => {
+  const filmId = +useParams().id;
+  const [searchParams] = useSearchParams();
+  const seriesId = +searchParams.get("seria");
   const [raply, setRaply] = useState(0);
   const comments = useSelector(selectFilm).comments;
   const dispatch = useDispatch();
+  useEffect(() => {
+    if (filmId) {
+      socket.emit("join_room", `film${filmId}`)
+    } else {
+      socket.emit("join_room", `seria${seriesId}`)
+    }
+  }, [filmId, seriesId])
+
+  useEffect(() => {
+    socket.on("receive_message", (data) => {
+      const { room, ...newDAta } = data
+      dispatch(
+        setCommentRating(newDAta)
+      );
+    })
+  }, [socket])
 
   const {
     register,
@@ -61,6 +84,12 @@ export const AllComments = () => {
                     onClick={() => {
                       const userId = +localStorage.getItem("id");
                       if (userId) {
+                        socket.emit("send_message", {
+                          id: comment.id,
+                          userId: userId,
+                          rating: true, room: filmId ? `film${filmId}` : `seria${seriesId}`
+                        })
+
                         dispatch(
                           setFilmCommentRating({
                             user_id: userId,
@@ -96,6 +125,12 @@ export const AllComments = () => {
                     onClick={() => {
                       const userId = +localStorage.getItem("id");
                       if (userId) {
+                        socket.emit("send_message", {
+                          id: comment.id,
+                          userId: userId,
+                          rating: false, room: filmId ? `film${filmId}` : `seria${seriesId}`
+                        })
+
                         dispatch(
                           setFilmCommentRating({
                             user_id: userId,
@@ -165,6 +200,11 @@ export const AllComments = () => {
               <form
                 className="d-flex align-items-cemter"
                 onSubmit={handleSubmit((value) => {
+                  socket.emit("send_message", {
+                    ...value,
+                    userId: +localStorage.getItem("id"),
+                    commentId: comment.id, room: filmId ? `film${filmId}` : `seria${seriesId}`
+                  })
                   dispatch(
                     addAnwser({
                       commentId: comment.id,
