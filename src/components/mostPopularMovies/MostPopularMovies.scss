@@ -57,6 +57,17 @@
 
 }
 
+.movies-genre {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 1;
+    overflow: hidden;
+    color: #fff;
+    line-height: 1.5em;
+    width: 75%;
+    float: right;
+}
+
 .movies-des {
     color: #fff;
     line-height: 1.5em;

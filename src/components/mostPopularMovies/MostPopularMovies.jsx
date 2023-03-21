@@ -12,6 +12,7 @@ import { Film } from "../film/Film";
 import { Link, Navigate } from "react-router-dom";
 import { selectpopularMowiesLoading } from "./../../features/popularMowies/popularMowies";
 import { LoadingSpinner } from "../UI/spinner/Spinner";
+import { FilmRating } from "../film/FilmRating";
 export const MostPopularMovies = () => {
   const dispatch = useDispatch();
   const [videoPlay, setVideoPlay] = useState(false);
@@ -119,7 +120,7 @@ export const MostPopularMovies = () => {
                                     <span className="movies-title">
                                       Genres :
                                     </span>
-                                    <span className="movies-des">
+                                    <span className="movies-genre">
                                       {popularMovies[0]?.genres?.map(
                                         (ganre) => {
                                           return ganre.name + " | ";
@@ -127,14 +128,17 @@ export const MostPopularMovies = () => {
                                       )}
                                     </span>
                                   </p>
-                                  <p className="movies-story">
+                                  <div className="movies-story">
                                     <span className="movies-title">
                                       Rating :
                                     </span>
                                     <span className="movies-des">
-                                      {popularMovies[0]?.rating}
+                                      <FilmRating
+                                        rating={popularMovies[0]?.rating}
+                                        color={"white"}
+                                      />
                                     </span>
-                                  </p>
+                                  </div>
                                   <p className="movies-story">
                                     <span className="movies-title">
                                       Short Description :
