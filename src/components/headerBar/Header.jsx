@@ -11,14 +11,16 @@ export const Header = () => {
   const dispatch = useDispatch();
   const [isLogin, setIsLogin] = useState(false);
   useEffect(() => {
-    dispatch(getUser(localStorage.getItem("id"))).unwrap().then(e => {
-      if (e.id) {
-        setIsLogin(true)
-      } else {
-        setIsLogin(false)
-      }
-    })
-  }, [dispatch])
+    dispatch(getUser(localStorage.getItem("id")))
+      .unwrap()
+      .then((e) => {
+        if (e.id) {
+          setIsLogin(true);
+        } else {
+          setIsLogin(false);
+        }
+      });
+  }, [dispatch]);
   return (
     <>
       <div className="header">
@@ -38,12 +40,11 @@ export const Header = () => {
             <form
               onSubmit={(e) => {
                 e.preventDefault();
-                if (searchParams.length > 2) {
-                  navigate({
-                    pathname: "/search",
-                    search: `?fiter=${searchParams}`,
-                  });
-                }
+                navigate({
+                  pathname: "/search",
+                  search: `?fiter=${searchParams}`,
+                });
+                setSearchParams("");
               }}
             >
               <input

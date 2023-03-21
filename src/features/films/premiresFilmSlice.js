@@ -103,7 +103,6 @@ export const getSeriaByid = createAsyncThunk(
 export const setFilmView = createAsyncThunk(
   "film/setFilmViw",
   async function ({ filmId, seriaId }, { rejectWithValue }) {
-    console.log(filmId, seriaId);
     const item = await axios.get("https://api.ipify.org?format=json");
     const ip = item.data.ip;
     if (ip) {
@@ -122,7 +121,7 @@ export const updateFilmRating = createAsyncThunk(
 
   async function ({ id, rating }, { rejectWithValue }) {
     try {
-      const item = await api.put("/film/updateFilmRating", {
+      const item = await api.put("film/updateFilmRating", {
         id,
         rating,
       });
@@ -164,13 +163,8 @@ const premireFilmSlice = createSlice({
   initialState,
   reducers: {
     addComment: (state, action) => {
-      const data = new Date();
       state.film.comments.push({
         ...action.payload,
-        createdAt: data.toString(),
-        commentLike: 0,
-        commentDisLike: 0,
-        id: Date.now(),
         comment_ratings: [],
         commentsAnwsers: [],
       });
@@ -179,37 +173,14 @@ const premireFilmSlice = createSlice({
       state.film.rating = action.payload;
     },
     addAnwser: (state, action) => {
-      const { commentId, userId, message, fullName } = action.payload;
-      const data = new Date();
+      const { commentId } = action.payload;
       const comment = state.film.comments.find(
         (comment) => comment.id === commentId
       );
-      comment.commentsAnwsers = comment.commentsAnwsers
-        ? [
-            {
-              commentId,
-              userId,
-              message,
-              createdAt: data.toString(),
-              user: { fullName },
-              commentLike: 0,
-              commentDisLike: 0,
-              id: Date.now(),
-            },
-            ...comment.commentsAnwsers,
-          ]
-        : [
-            {
-              commentId,
-              userId,
-              message,
-              createdAt: data.toString(),
-              user: { fullName },
-              commentLike: 0,
-              commentDisLike: 0,
-              id: Date.now(),
-            },
-          ];
+      comment.commentsAnwsers.push({
+        ...action.payload,
+        comment_ratings: [],
+      });
     },
     setCommentAnwserRating: (state, action) => {
       const { rating, commentsAnwserId, userId, commentId } = action.payload;

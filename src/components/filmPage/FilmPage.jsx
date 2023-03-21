@@ -14,10 +14,12 @@ import {
 import { AboutFilm } from "../abouteFilm/AboutFilm";
 import { Navigate, useParams, useSearchParams } from "react-router-dom";
 import { LoadingSpinner } from "../UI/spinner/Spinner";
+
 export const FilmPage = ({ film }) => {
   const [videoPlay, setVideoPlay] = useState(false);
   const [isTrailer, setIstrailer] = useState(true);
   const [currentTime, setCurrentTime] = useState(0);
+  const [loading, setLoading] = useState(true);
   const [searchParams] = useSearchParams();
   const seriaId = +searchParams.get("seria");
   const filmId = +useParams().id;
@@ -33,6 +35,11 @@ export const FilmPage = ({ film }) => {
       }
     }
   }, [currentTime, dispatch, filmId, seriaId]);
+
+  useEffect(() => {
+    setLoading(filmLoading);
+  }, [filmLoading]);
+
   const filterManu = [
     {
       name: "Trailer",
@@ -47,7 +54,7 @@ export const FilmPage = ({ film }) => {
   ];
   return (
     <>
-      {filmLoading ? (
+      {loading ? (
         <div className="movies-section mt-5">
           <div className="container mt-5 d-flex justify-content-center">
             <div className="popular-movies">
@@ -70,8 +77,8 @@ export const FilmPage = ({ film }) => {
                     {film.sezon
                       ? ` Sezon : ${film.sezon}  Part : ${film.part}`
                       : film.part
-                        ? `Part : ${film.part}`
-                        : ""}
+                      ? `Part : ${film.part}`
+                      : ""}
                   </p>
 
                   <div className="mx-3">
@@ -121,7 +128,7 @@ export const FilmPage = ({ film }) => {
                           onTimeUpdate={(e) => {
                             if (
                               Math.ceil(e.target.currentTime / 60) ===
-                              Math.ceil(e.target.duration / 120) &&
+                                Math.ceil(e.target.duration / 120) &&
                               !currentTime
                             ) {
                               setCurrentTime(e.target.currentTime);

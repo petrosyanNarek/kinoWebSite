@@ -2,10 +2,8 @@ import * as yup from "yup";
 import { useDispatch, useSelector } from "react-redux";
 import ReactStars from "react-rating-stars-component";
 import {
-  addComment,
   addFilmComment,
   updateFilmRating,
-  updateRating,
   updateSeriesRating,
 } from "../../features/films/premiresFilmSlice";
 import { getUser, selectLoginUser } from "../../features/user/userSlice";
@@ -15,24 +13,21 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { selectFilm } from "./../../features/films/premiresFilmSlice";
-import io from "socket.io-client"
-import { useEffect, useState } from "react";
+import io from "socket.io-client";
 
 export const CommentsSchema = yup.object().shape({
   message: yup.string().required("Message is a required !!!"),
   // rating: yup.number().min(0.5).max(5).required()
 });
-const socket = io.connect("http://localhost:3000")
 
-
+const socket = io.connect("http://localhost:3000");
 export const AddComents = () => {
   const dispatch = useDispatch();
   const filmId = +useParams().id;
   const [searchParams] = useSearchParams();
   const seriesId = +searchParams.get("seria");
-  const user = useSelector(selectLoginUser);
+  const { email, ...user } = useSelector(selectLoginUser);
   const film = useSelector(selectFilm);
-  const [room, setRoom] = useState("")
   const {
     register,
     handleSubmit,
@@ -48,35 +43,26 @@ export const AddComents = () => {
     },
   });
 
-
-
-  useEffect(() => {
-    if (filmId) {
-      socket.emit("join_room", `film${filmId}`)
-    } else {
-      socket.emit("join_room", `seria${seriesId}`)
-    }
-  }, [filmId, seriesId])
-
-  useEffect(() => {
-    socket.on("receive_message", (data) => {
-      const { room, ...newCom } = data
-      dispatch(addComment(newCom));
-    })
-  }, [socket])
-
-
-
-
   const onSubmitHandler = (data) => {
     if (localStorage.getItem("id")) {
       dispatch(getUser(localStorage.getItem("id")))
         .unwrap()
         .then((user) => {
           if (filmId) {
-            socket.emit("send_message", { ...data, user, filmId, room: `film${filmId}` })
-            dispatch(addFilmComment({ ...data, filmId, userId: user.id }));
-            dispatch(addComment({ ...data, user, filmId }));
+            dispatch(addFilmComment({ ...data, filmId, userId: user.id }))
+              .unwrap()
+              .then((com) => {
+                const { userId, ...newCom } = com;
+                socket.emit("send_message", {
+                  ...newCom,
+                  rating: (film.rating + data.rating) / 2,
+                  id: com.id,
+                  user,
+                  filmId,
+                  room: `film${filmId}`,
+                });
+              });
+
             dispatch(
               updateFilmRating({
                 id: filmId,
@@ -84,9 +70,19 @@ export const AddComents = () => {
               })
             );
           } else {
-            socket.emit("send_message", { ...data, user, seriesId, room: `seria${seriesId}` })
-            dispatch(addFilmComment({ ...data, seriesId, userId: user.id }));
-            dispatch(addComment({ ...data, user }));
+            dispatch(addFilmComment({ ...data, seriesId, userId: user.id }))
+              .unwrap()
+              .then((com) => {
+                const { userId, ...newCom } = com;
+                socket.emit("send_message", {
+                  rating: (film.rating + data.rating) / 2,
+                  ...newCom,
+                  user,
+                  seriesId,
+                  room: `seria${seriesId}`,
+                });
+              });
+
             dispatch(
               updateSeriesRating({
                 id: seriesId,
@@ -94,7 +90,6 @@ export const AddComents = () => {
               })
             );
           }
-          dispatch(updateRating((film.rating + data.rating) / 2));
         });
       reset();
     } else {
@@ -150,7 +145,8 @@ export const AddComents = () => {
               placeholder={
                 user.id ? "Youar Message..." : "Login to add comment!"
               }
-              disabled={user.id ? false : true}
+              data-bs-toggle={user.id ? "" : "modal"}
+              data-bs-target="#exampleModal"
               {...register("message")}
               name="message"
               className="text-area-field"
@@ -163,9 +159,10 @@ export const AddComents = () => {
 
         <div className="group">
           <button
-            type="submit"
+            type={user.id ? "submit" : "button"}
             className="send-btn"
-            disabled={user.id ? false : true}
+            data-bs-toggle={user.id ? "" : "modal"}
+            data-bs-target="#exampleModal"
           >
             SEND
           </button>

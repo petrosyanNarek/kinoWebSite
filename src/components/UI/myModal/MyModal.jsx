@@ -59,14 +59,14 @@ export const MyModal = ({ setIsLogin }) => {
           setTimeout(() => {
             reset();
             setLogin(true);
-          }, 1500);
+          }, 500);
         })
         .catch((e) => {
           setMessage(e);
+          setTimeout(() => {
+            setMessage("");
+          }, 500);
         });
-      setTimeout(() => {
-        setMessage("");
-      }, 2500);
     }
   };
   return (
@@ -104,6 +104,7 @@ export const MyModal = ({ setIsLogin }) => {
                     onClick={() => {
                       reset();
                       setLogin(!login);
+                      setMessage("");
                     }}
                   >
                     <i
@@ -154,7 +155,17 @@ export const MyModal = ({ setIsLogin }) => {
                       {touchedFields.password && errors.password?.message && (
                         <div className="errors">{errors.password?.message}</div>
                       )}
-                      <input type="submit" value="submit" />
+                      <input
+                        type="submit"
+                        value="submit"
+                        disabled={
+                          touchedFields.password ||
+                          touchedFields.email ||
+                          !message
+                            ? false
+                            : true
+                        }
+                      />
                     </form>
                     <p className="text-center text-danger fw-bold">{message}</p>
                   </div>

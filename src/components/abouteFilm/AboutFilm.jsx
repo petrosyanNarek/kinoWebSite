@@ -54,7 +54,8 @@ export const AboutFilm = ({ film }) => {
             </dd>
           </>
         )}
-
+        <dt className="col-sm-3">Short Description</dt>
+        <dd className="col-sm-9">{film.shortDescription}</dd>
         <dt className="col-sm-3">Description</dt>
         <dd className="col-sm-9">{film.description}</dd>
         <dt className="col-sm-3">Rating</dt>

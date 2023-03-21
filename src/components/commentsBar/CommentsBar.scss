@@ -58,6 +58,7 @@
 .all-comments {
     height: 320px;
     overflow-y: scroll;
+    cursor: pointer;
 
     &::-webkit-scrollbar {
         display: none;
@@ -126,14 +127,6 @@
     display: flex;
     align-items: center;
     position: relative;
-
-    // div {
-    //     position: absolute;
-    //     left: 25px;
-    //     top: 0;
-    //     background-color: #ff8d1b;
-    //     padding: 15px;
-    // }
 
     span {
         font-size: 16px;

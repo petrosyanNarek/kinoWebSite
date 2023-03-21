@@ -1,21 +1,18 @@
 import {
-  addAnwser,
   addCommentAnwser,
   selectFilm,
-  setCommentAnwserRating,
-  setCommentRating,
   setFilmCommentRating,
 } from "../../features/films/premiresFilmSlice";
 import { useDispatch, useSelector } from "react-redux";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { selectLoginUser } from "../../features/user/userSlice";
 import { useForm } from "react-hook-form";
 import { CommentsSchema } from "./AddComents";
 import { yupResolver } from "@hookform/resolvers/yup";
-import io from "socket.io-client"
+import io from "socket.io-client";
 import { useParams, useSearchParams } from "react-router-dom";
 
-const socket = io.connect("http://localhost:3000")
+const socket = io.connect("http://localhost:3000");
 
 export const AllComments = () => {
   const filmId = +useParams().id;
@@ -23,23 +20,8 @@ export const AllComments = () => {
   const seriesId = +searchParams.get("seria");
   const [raply, setRaply] = useState(0);
   const comments = useSelector(selectFilm).comments;
-  const dispatch = useDispatch();
-  useEffect(() => {
-    if (filmId) {
-      socket.emit("join_room", `film${filmId}`)
-    } else {
-      socket.emit("join_room", `seria${seriesId}`)
-    }
-  }, [filmId, seriesId])
 
-  useEffect(() => {
-    socket.on("receive_message", (data) => {
-      const { room, ...newDAta } = data
-      dispatch(
-        setCommentRating(newDAta)
-      );
-    })
-  }, [socket])
+  const dispatch = useDispatch();
 
   const {
     register,
@@ -49,8 +31,7 @@ export const AllComments = () => {
   } = useForm({
     resolver: yupResolver(CommentsSchema),
   });
-  const user = useSelector(selectLoginUser);
-  console.log(user);
+  const { email, ...user } = useSelector(selectLoginUser);
   return (
     <div className="all-comments mt-5">
       {comments?.map((comment) => {
@@ -71,6 +52,8 @@ export const AllComments = () => {
               <div className="d-flex align-items-center p-2">
                 <div className="comment-reaction">
                   <i
+                    data-bs-toggle={user.id ? "" : "modal"}
+                    data-bs-target="#exampleModal"
                     className={
                       comment?.comment_ratings?.find(
                         (e) =>
@@ -87,21 +70,13 @@ export const AllComments = () => {
                         socket.emit("send_message", {
                           id: comment.id,
                           userId: userId,
-                          rating: true, room: filmId ? `film${filmId}` : `seria${seriesId}`
-                        })
-
+                          rating: true,
+                          room: filmId ? `film${filmId}` : `seria${seriesId}`,
+                        });
                         dispatch(
                           setFilmCommentRating({
                             user_id: userId,
                             comment_id: comment.id,
-                            rating: true,
-                          })
-                        );
-
-                        dispatch(
-                          setCommentRating({
-                            id: comment.id,
-                            userId: userId,
                             rating: true,
                           })
                         );
@@ -112,6 +87,8 @@ export const AllComments = () => {
                 </div>
                 <div className="comment-reaction mx-4">
                   <i
+                    data-bs-toggle={user.id ? "" : "modal"}
+                    data-bs-target="#exampleModal"
                     className={
                       comment?.comment_ratings?.find(
                         (e) =>
@@ -128,9 +105,9 @@ export const AllComments = () => {
                         socket.emit("send_message", {
                           id: comment.id,
                           userId: userId,
-                          rating: false, room: filmId ? `film${filmId}` : `seria${seriesId}`
-                        })
-
+                          rating: false,
+                          room: filmId ? `film${filmId}` : `seria${seriesId}`,
+                        });
                         dispatch(
                           setFilmCommentRating({
                             user_id: userId,
@@ -138,48 +115,10 @@ export const AllComments = () => {
                             rating: false,
                           })
                         );
-
-                        dispatch(
-                          setCommentRating({
-                            id: comment.id,
-                            userId: userId,
-                            rating: false,
-                          })
-                        );
                       }
                     }}
                   ></i>
-                  <div className="dropdown">
-                    <span
-                      role="button"
-                      id="dropdownMenuLink"
-                      data-bs-toggle="dropdown"
-                      aria-expanded="false"
-                    >
-                      ({comment.commentDisLike})
-                    </span>
-
-                    <ul
-                      className="dropdown-menu"
-                      aria-labelledby="dropdownMenuLink"
-                    >
-                      <li>
-                        <a className="dropdown-item" href="/">
-                          Action
-                        </a>
-                      </li>
-                      <li>
-                        <a className="dropdown-item" href="/">
-                          Another action
-                        </a>
-                      </li>
-                      <li>
-                        <a className="dropdown-item" href="/">
-                          Something else here
-                        </a>
-                      </li>
-                    </ul>
-                  </div>
+                  <span>({comment.commentDisLike})</span>
                 </div>
                 <button
                   className="btn d-flex align-items-center"
@@ -200,30 +139,27 @@ export const AllComments = () => {
               <form
                 className="d-flex align-items-cemter"
                 onSubmit={handleSubmit((value) => {
-                  socket.emit("send_message", {
-                    ...value,
-                    userId: +localStorage.getItem("id"),
-                    commentId: comment.id, room: filmId ? `film${filmId}` : `seria${seriesId}`
-                  })
-                  dispatch(
-                    addAnwser({
-                      commentId: comment.id,
-                      userId: +localStorage.getItem("id"),
-                      message: value.message,
-                      fullName: user.fullName,
-                    })
-                  );
                   dispatch(
                     addCommentAnwser({
                       ...value,
                       userId: +localStorage.getItem("id"),
                       commentId: comment.id,
                     })
-                  );
+                  )
+                    .unwrap()
+                    .then((com) => {
+                      socket.emit("send_message", {
+                        ...com,
+                        user: user,
+                        room: filmId ? `film${filmId}` : `seria${seriesId}`,
+                      });
+                    });
                   reset();
                 })}
               >
                 <input
+                  data-bs-toggle={user.id ? "" : "modal"}
+                  data-bs-target="#exampleModal"
                   type="text"
                   className="input-field m-0"
                   name="message"
@@ -234,9 +170,10 @@ export const AllComments = () => {
                   disabled={localStorage.getItem("id") ? false : true}
                 />
                 <button
-                  type="submit"
+                  data-bs-toggle={user.id ? "" : "modal"}
+                  data-bs-target="#exampleModal"
+                  type={user.id ? "submit" : "button"}
                   className="send-btn"
-                  disabled={localStorage.getItem("id") ? false : true}
                 >
                   Send
                 </button>
@@ -281,6 +218,8 @@ export const AllComments = () => {
                         <div className="d-flex align-items-center p-2">
                           <div className="comment-reaction">
                             <i
+                              data-bs-toggle={user.id ? "" : "modal"}
+                              data-bs-target="#exampleModal"
                               className={
                                 commentsAnwser?.comment_ratings?.find(
                                   (e) =>
@@ -294,19 +233,20 @@ export const AllComments = () => {
                               onClick={() => {
                                 const userId = +localStorage.getItem("id");
                                 if (userId) {
+                                  socket.emit("send_message", {
+                                    rating: true,
+                                    commentsAnwserId: commentsAnwser.id,
+                                    userId,
+                                    commentId: comment.id,
+                                    room: filmId
+                                      ? `film${filmId}`
+                                      : `seria${seriesId}`,
+                                  });
                                   dispatch(
                                     setFilmCommentRating({
                                       user_id: userId,
                                       coment_anwser_id: commentsAnwser.id,
                                       rating: true,
-                                    })
-                                  );
-                                  dispatch(
-                                    setCommentAnwserRating({
-                                      rating: true,
-                                      commentsAnwserId: commentsAnwser.id,
-                                      userId,
-                                      commentId: comment.id,
                                     })
                                   );
                                 }
@@ -316,6 +256,8 @@ export const AllComments = () => {
                           </div>
                           <div className="comment-reaction mx-4">
                             <i
+                              data-bs-toggle={user.id ? "" : "modal"}
+                              data-bs-target="#exampleModal"
                               className={
                                 commentsAnwser?.comment_ratings?.find(
                                   (e) =>
@@ -329,19 +271,20 @@ export const AllComments = () => {
                               onClick={() => {
                                 const userId = +localStorage.getItem("id");
                                 if (userId) {
+                                  socket.emit("send_message", {
+                                    rating: false,
+                                    commentsAnwserId: commentsAnwser.id,
+                                    userId,
+                                    commentId: comment.id,
+                                    room: filmId
+                                      ? `film${filmId}`
+                                      : `seria${seriesId}`,
+                                  });
                                   dispatch(
                                     setFilmCommentRating({
                                       user_id: userId,
                                       coment_anwser_id: commentsAnwser.id,
                                       rating: false,
-                                    })
-                                  );
-                                  dispatch(
-                                    setCommentAnwserRating({
-                                      rating: false,
-                                      commentsAnwserId: commentsAnwser.id,
-                                      userId,
-                                      commentId: comment.id,
                                     })
                                   );
                                 }
