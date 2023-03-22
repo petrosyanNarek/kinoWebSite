@@ -15,7 +15,7 @@ import {
   setCommentRating,
   updateRating,
 } from "./features/films/premiresFilmSlice";
-const socket = io.connect("http://localhost:3000");
+const socket = io.connect(process.env.REACT_APP_SOCET_IO_CONNECT);
 function App() {
   const dispatch = useDispatch();
   const filmId = useLocation().pathname.split("/");
@@ -32,6 +32,7 @@ function App() {
   }, [filmId, seriesId, dispatch]);
   useEffect(() => {
     socket.on("receive_message", (data) => {
+      console.log("a");
       const { room, ...newData } = data;
       if (newData.user && (newData.filmId || newData.seriesId)) {
         dispatch(addComment(newData));

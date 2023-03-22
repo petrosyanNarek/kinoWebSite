@@ -12,7 +12,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import io from "socket.io-client";
 import { useParams, useSearchParams } from "react-router-dom";
 
-const socket = io.connect("http://localhost:3000");
+const socket = io.connect(process.env.REACT_APP_SOCET_IO_CONNECT);
 
 export const AllComments = () => {
   const filmId = +useParams().id;

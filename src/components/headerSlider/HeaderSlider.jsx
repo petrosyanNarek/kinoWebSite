@@ -67,7 +67,10 @@ export const HeaderSlider = () => {
             return (
               <SwiperSlide key={film.id}>
                 <div className="main-slider">
-                  <img src={film.cardImg} alt="" />
+                  <img
+                    src={process.env.REACT_APP_BACKEND_PATH + film.cardImg}
+                    alt=""
+                  />
                   <div className="slider-content">
                     <div className="time-slider">
                       <div
@@ -114,7 +117,12 @@ export const HeaderSlider = () => {
                 <SwiperSlide key={filmItem.id}>
                   <div className="d-flex w-100 h-100">
                     <div className="aside-items-img">
-                      <img src={filmItem.cardImg} alt="" />
+                      <img
+                        src={
+                          process.env.REACT_APP_BACKEND_PATH + filmItem.cardImg
+                        }
+                        alt=""
+                      />
                     </div>
                     <div className="aside-item-info">
                       <h6>{filmItem.name}</h6>

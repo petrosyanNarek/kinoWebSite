@@ -6,7 +6,11 @@ export const Film = ({ film }) => {
     <div className="col film">
       <div className="card film-card">
         <div className="card-header">
-          <img src={film.cardImg} alt="" className="card-header-img" />
+          <img
+            src={process.env.REACT_APP_BACKEND_PATH + film.cardImg}
+            alt=""
+            className="card-header-img"
+          />
           <div className="overlay">
             <div className="face">
               <Link
@@ -25,7 +29,14 @@ export const Film = ({ film }) => {
           </div>
         </div>
         <div className="card-body">
-          <p className="card-text text-center card-name">{film.name}</p>
+          <Link
+            to={
+              film.categoryId ? `/film/${film.id}` : `/film/?seria=${film.id}`
+            }
+            className="card-text text-center card-name"
+          >
+            {film.name}
+          </Link>
           <div className="all-info">
             <p>
               {film.createdYear

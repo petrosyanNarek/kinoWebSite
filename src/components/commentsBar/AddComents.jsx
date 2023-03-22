@@ -17,10 +17,9 @@ import io from "socket.io-client";
 
 export const CommentsSchema = yup.object().shape({
   message: yup.string().required("Message is a required !!!"),
-  // rating: yup.number().min(0.5).max(5).required()
 });
 
-const socket = io.connect("http://localhost:3000");
+const socket = io.connect(process.env.REACT_APP_SOCET_IO_CONNECT);
 export const AddComents = () => {
   const dispatch = useDispatch();
   const filmId = +useParams().id;

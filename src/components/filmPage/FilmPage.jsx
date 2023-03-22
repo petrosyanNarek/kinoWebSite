@@ -96,7 +96,13 @@ export const FilmPage = ({ film }) => {
                     <div className="film-video">
                       {!videoPlay ? (
                         <>
-                          <img src={film.cardImg} alt="" className="mt-3" />
+                          <img
+                            src={
+                              process.env.REACT_APP_BACKEND_PATH + film.cardImg
+                            }
+                            alt=""
+                            className="mt-3"
+                          />
                           <button
                             className="play fa-solid fa-circle-play btn"
                             onClick={() => {
@@ -107,7 +113,9 @@ export const FilmPage = ({ film }) => {
                       ) : (
                         <video
                           width="100%"
-                          src={film.trailer}
+                          src={
+                            process.env.REACT_APP_BACKEND_PATH + film.trailer
+                          }
                           controls={true}
                           autoPlay
                         ></video>
@@ -135,7 +143,7 @@ export const FilmPage = ({ film }) => {
                             }
                           }}
                           width="100%"
-                          src={film.video}
+                          src={process.env.REACT_APP_BACKEND_PATH + film.video}
                           controls={true}
                           autoPlay
                         ></video>

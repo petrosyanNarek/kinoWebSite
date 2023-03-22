@@ -84,7 +84,10 @@ export const MostPopularMovies = () => {
                                 {!videoPlay ? (
                                   <>
                                     <img
-                                      src={popularMovies[0]?.cardImg}
+                                      src={
+                                        process.env.REACT_APP_BACKEND_PATH +
+                                        popularMovies[0]?.cardImg
+                                      }
                                       alt=""
                                       className="w-100"
                                     />
@@ -145,26 +148,6 @@ export const MostPopularMovies = () => {
                                     </span>
                                     <span className="movies-des">
                                       {popularMovies[0]?.shortDescription}
-                                      Lorem ipsum, dolor sit amet consectetur
-                                      adipisicing elit. Tempora, soluta porro
-                                      ratione doloremque vitae quaerat
-                                      architecto ab ipsum? Accusantium sint
-                                      mollitia fuga asperiores quidem vel esse
-                                      quisquam, excepturi dolorum aspernatur sit
-                                      adipisci eaque enim suscipit voluptatum.
-                                      Minima error fugiat iste maiores amet
-                                      similique, laudantium a distinctio hic, ut
-                                      praesentium recusandae aut nemo libero
-                                      porro eum mollitia voluptatem,
-                                      reprehenderit impedit sequi accusantium!
-                                      Impedit in quis deleniti delectus iusto
-                                      sequi reiciendis rem veniam, et voluptatum
-                                      earum. Minus sint suscipit quae itaque,
-                                      exercitationem nemo nam fugiat qui
-                                      facilis. Aperiam veritatis quidem,
-                                      repudiandae molestiae repellendus modi,
-                                      velit error voluptas corporis, deserunt
-                                      incidunt illum assumenda!
                                     </span>
                                   </p>
                                 </div>
