@@ -47,6 +47,7 @@ export const FilmsByGanre = ({ genreId, countryId, name }) => {
     }
     window.scrollTo(0, 0);
   }, [dispatch, genreId, countryId, name, activePage]);
+
   return (
     <>
       {loading ? (

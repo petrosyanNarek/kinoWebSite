@@ -18,7 +18,7 @@ export const MenuBar = () => {
   return (
     <div className="menu-bar">
       <ul className="menu-item">
-        <li className="active">
+        <li>
           <Link to={"/"}>Home</Link>
         </li>
         <li className="dropDown">

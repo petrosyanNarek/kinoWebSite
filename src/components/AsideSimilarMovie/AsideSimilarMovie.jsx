@@ -15,7 +15,10 @@ export const AsideSimilarMovie = () => {
               <div className="movie-item mb-2" key={film.id}>
                 <div className="similar-movie-img">
                   <Link to={"/film/" + film.id}>
-                    <img src={film.cardImg} alt="" />
+                    <img
+                      src={process.env.REACT_APP_BACKEND_PATH + film.cardImg}
+                      alt=""
+                    />
                   </Link>
                 </div>
                 <div className="similar-movies-info">
@@ -27,7 +30,7 @@ export const AsideSimilarMovie = () => {
                       return (
                         <li key={author.id}>
                           <a className="similar-movies-author-link" href="/">
-                            {author.name + " " + author.surname}
+                            {`${author.name} ${author.surname}`}
                           </a>
                         </li>
                       );

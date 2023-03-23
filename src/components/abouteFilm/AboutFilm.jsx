@@ -22,8 +22,8 @@ export const AboutFilm = ({ film }) => {
             <dt className="col-sm-3">Countries</dt>
             <dd className="col-sm-9">
               <p>
-                {film.countries?.map((country, i) =>
-                  i > 0 ? " | " + country.name : country.name
+                {film.countries?.map(
+                  (country, i) => `${i > 0 ? " | " : ""}  ${country.name}`
                 )}
               </p>
             </dd>
@@ -62,8 +62,12 @@ export const AboutFilm = ({ film }) => {
         <dd className="col-sm-9">
           <FilmRating rating={film.rating} />
         </dd>
-        <dt className="col-sm-3">Views</dt>
-        <dd className="col-sm-9">{film.views}</dd>
+        {film.categoryId === 1 && (
+          <>
+            <dt className="col-sm-3">Views</dt>
+            <dd className="col-sm-9">{film.views}</dd>
+          </>
+        )}
       </dl>
     </div>
   );
